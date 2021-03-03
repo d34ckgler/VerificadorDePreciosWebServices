@@ -1,0 +1,38 @@
+{
+  "name": "verificadordeprecios",
+  "version": "1.0.2019",
+  "description": "Verificador de Precios Bio",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "ts-node ./src/index.ts",
+    "test": ""
+  },
+  "author": "Diego Ortiz",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^14.14.20",
+    "@types/typescript": "^2.0.0",
+    "@zxing/library": "^0.15.2",
+    "cluster": "^0.7.7",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^3.21.2",
+    "https": "^1.0.0",
+    "ipp": "^2.0.1",
+    "mobile-detect": "^1.4.4",
+    "mongoose": "^5.6.9",
+    "mssql": "^6.0.1",
+    "node-sessionstorage": "^1.0.0",
+    "nodemon": "^1.19.1",
+    "popper.js": "^1.16.0",
+    "react-native": "^0.61.5",
+    "react-native-bluetooth-escpos-printer": "0.0.5",
+    "rn-bluetooth-printer": "^1.0.1",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/react-native": "^0.61.12"
+  }
+}

@@ -1,0 +1,282 @@
+@font-face {
+  font-family: 'Bree';
+  src: url('./font/BreeRegular.otf');
+}
+* {
+  font-family: "Bree";
+  font-weight: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  padding: 0;
+  margin:0;
+  height: 100%;
+}
+#central {
+  display: none;
+}
+#btn-print {
+  width: 100%; 
+  height: 10%; 
+  position: fixed; 
+  bottom: 0%; 
+  left: 0%
+}
+.pad {
+  padding-bottom: 5% !important;
+}
+.totalizer {
+  display: none;
+  position: relative; 
+  right: -3.5% !important;
+}
+/* Mobile Styles */
+@media only screen and (max-width: 350px) {
+  body {
+    width: 100% !important;
+  }
+  #titleapp {
+    display: none;
+  }
+  .input-group-text input {
+    width: 60px !important;
+    max-width: 60px !important;
+  }
+  #PrintHabTab{
+    display: none;
+  }
+  #btn-send {
+    display: none;
+  }
+  #btn-print {
+    width: 100%; 
+    height: 8%; 
+    position: fixed; 
+    bottom: 0%; 
+    left: 0%
+  }
+  .reconnect button{
+    position: relative;
+    text-align: center !important;
+    width: 70% !important;
+    height: auto !important;
+    top: 30% !important;
+    left: -25% !important;
+  }
+  .pad {
+    padding-bottom: 20% !important;
+  }
+  .totalizer {
+    display: none;
+    position: absolute; 
+    margin-bottom: 5% !important;
+    right: 10% !important;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  body {
+    margin-top: 0%;
+    width: 100% !important;
+  }
+  #central {
+    position: relative;
+    left: 5% !important;
+  }
+  .pad {
+    padding-bottom: 20% !important;
+  }
+  #centrals {
+    left: 5% !important;
+  }
+  .totalizer {
+    display: none;
+    position: absolute; 
+    margin-bottom: 5% !important;
+    right: 10% !important;
+  }
+}
+
+.reconnect button{
+  position: relative;
+  text-align: center !important;
+  width: 70% !important;
+  height: auto !important;
+  top: 30% !important;
+  left: -25% !important;
+}
+
+#camera ,canvas {
+    width: 90%;
+    height: auto !important;
+  }
+  #camera {
+    display: none;
+    position: fixed;
+    top: 0px;
+  }
+  video {
+    z-index: 1;
+    width: 100% !important;
+    height: 110vh !important;
+    position: fixed;
+    top: -15%;
+    z-index: 0;
+  }
+  
+#camera video.drawingBuffer, canvas.drawingBuffer {
+  display: none;
+}
+
+.preloader-scan {
+  position: fixed;
+  left: 0;
+  right: 0;
+  max-width: 200px;
+  display: table;
+  margin: 0 auto;
+  height: 100%;
+  text-align: center;
+  }
+
+  ul {
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    list-style-type: none;
+    text-align: center;
+  }
+
+  li {
+    display: inline-block;
+    width: 2px;
+    height: 50px;
+    background-color: #444;
+    visibility: hidden;
+  }
+
+  .laser {
+    display: none;
+    width: 100%;
+    margin-left: -25%;
+    background-color: greenyellow;
+    height: 1px;
+    position: absolute;
+    left: 25%;
+    /*top: 40%;*/
+    top: 30%;
+    width: 200px;
+    z-index: 4;
+    box-shadow: 0 0 4px green;
+    animation: scanning 2s infinite;
+  }
+
+  .reconnect{
+    display: none;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    padding-top: 20%;
+    padding-left: 45%;
+    background-color: rgba(0,0,0,0.8);
+  }
+
+  .reconnect button {
+    position: relative; 
+    left: 0%; 
+    top: -25px;
+  }
+
+  /*#btn-send {
+    width: 95% !important;
+    position: fixed;
+    top: 1%;
+    left: 1%;
+  }*/
+
+  .close {
+    display: none;
+    color: grey;
+    font-size: 16pt;
+    text-align: center !important;
+    position: fixed;
+    left: 85%;
+    top: 5%;
+    margin: 1% !important;
+    height: 25px;
+    width: 25px;
+    z-index: 5;
+    box-shadow: 0 0 4px gray;
+  }
+
+  .close button {
+    width: 25px;
+    height: auto;
+  }
+
+  .close::before {
+    background: blue;
+  }
+
+  .diode {
+    animation: beam .2s infinite;
+  }
+  
+.parentv {
+  visibility: hidden;
+  display: none;
+  width: 220%;
+  margin-left: -25%;
+  background-color: black !important;
+  height: 40% !important;
+  position: absolute;
+  left: 25%;
+  top: 30%;
+  width: 200px;
+  z-index: 2;
+  border: 2px black;
+  box-shadow: 0 0 4px black;
+  opacity: 0.5;
+}
+.parentc {  
+  display: none;
+  width: 100% !important;
+  height: 105% !important;
+  margin-left: -25%;
+  /*background-color: black !important;*/
+  position: fixed;
+  left: 25%;
+  top: -5%;
+  width: 200px;
+  z-index: 3;
+  border: 104px black outset;
+  border-top: 136px black inset;
+  border-bottom: 185px black inset;
+  box-shadow: inset 0px 74px 2px 2px black;
+  opacity: 0.5;
+}
+
+@keyframes beam {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes scanning {
+  50% {
+    transform: translateY(76px);
+  }
+}
+
+input[type="text"] {
+  font-size: 10pt;
+}

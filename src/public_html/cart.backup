@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"--> 
+    <title>Carrito de Compras | BioMercados</title>
+    <!--script type="text/javascript" src="assets/js/pace.min.js"></script-->
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/pace.css">
+    <link rel="stylesheet/less" type="text/css" href="assets/css/scan.less" >
+    <script type="text/javascript" src="assets/js/less.js"></script>
+    <script>
+      function full() { document.querySelector("html").requestFullscreen(); }
+    </script>
+</head>
+<body>
+  <div class="reconnect">
+    <button style="width: 20%; font-size: 18pt;" id="btxReconnect" class="btn btn-danger"><i class="fas fa-redo-alt"></i> Reconectar</button>
+  </div>
+  <div id="resultado"></div>
+  <!-- QUAGGA SCANNER INIT-->
+    <!--div id="camera" style="width: 400px;">
+      <div class="close">
+        <button class="btn-danger">X</button>
+      </div>
+      <video muted autoplay playsinline="true"></video>
+      <canvas class="drawingBuffer"></canvas>            
+    </!--div>
+    <!-- QUAGGA SCANNER END -->
+
+    <!-- ZXING SCANNER INIT -->
+    <div id="camera" style="width: 400px;">
+      <div style="position: fixed; visibility: hidden;" class="select">
+        <label for="videoSource"></label><select id="videoSource"></select>
+      </div>
+      <button id="go" style="position: fixed; visibility: hidden;"></button>
+      <div>
+        <video muted autoplay id="video" playsinline="true"></video>
+        <canvas id="pcCanvas" width="640" height="480" style="display: none; float: bottom;"></canvas>
+        <canvas id="mobileCanvas" width="240" height="320" style="display: none; float: bottom;"></canvas>
+      </div>
+    </div>
+    <!-- ZXING SCANNER END-->
+
+    <div class="ocrloader">
+      <em></em>
+      <div>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i>
+      </div>
+      <div >
+        <span class="line"></span>
+      </div>
+    </div>
+
+          <div class="parentc"></div>
+          <div class="close"">
+            <button class="btn-danger"">X</button>
+          </div>
+          <div class="preloader-scan">
+            <ul>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              
+              <div class="diode">
+                
+                
+              </div>
+              
+              <div class="parentv"></div>
+            </ul>
+          </div>
+   
+
+      <section id="centrals">
+        <div id="myTabContent" class="tab-content">
+          <div class="tab-pane fade show active" id="home">
+                  
+              <div style="width: 93%; text-align: left; position: relative; margin-left: 8%; margin-right: 30%;">
+
+                <div id="titleapp" style="position: relative; text-align: center; padding: 3%; margin-left: -10% !important;">
+                    <IMG id="btxClear" width="150" height="100" src="http://biomercados.com.ve/wp-content/uploads/2019/11/cropped-logoAsset-1-1-300x216.png"> </IMG>
+                    <H1>CARRITO DE COMPRAS</H1></div>
+                  <div style="width: 95%">
+                      <div class="form-group">
+                        <div style="visibility: hidden; display: none;" id="PrintHabTab" class="custom-control custom-switch">
+                          <input type="checkbox" class="custom-control-input" id="PrintHab">
+                          <label class="custom-control-label" for="PrintHab">Habilitar Impresion Automática</label>
+                        </div>
+                        
+                          <label for="szCode">Codigo</label>
+                          <input id="szCode" type="number" class="form-control" style="width: 100%;">
+                          <button id="btn-send" type="button" class="btn btn-success" style="width: 100%;">Escanear Codigo</button>
+                          <div id="forszCodeinv" class="invalid-feedback">Por favor, Intente nuevamente.</div>
+                          <div id="forszCodev" class="valid-feedback">Producto encontrado con exito.</div>
+                      </div>
+
+                      <div id="DataGridView" style="height: 380px !important; overflow-y: auto; margin-bottom: 2% !important;">
+                          <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                  <th scope="col">Producto</th>
+                                  <th align="right" scope="col">Cantidad</th>
+                                  <th align="center" scope="col">PVP</th>
+                                </tr>
+                            </thead>
+                            <tbody id="GridViewList">
+                                <!-- LISTADO DE PRODUCTOS -->
+                                <tr>
+                                    <td colspan="3" align="center">NO HAY PRODUCTOS</td>
+                                </tr>
+                            </tbody>
+                          </table>
+                      </div>
+                      
+                    <div class="totalizer">
+                        <div class="form-group" style="float: right; margin: 0px !important">
+                            <!--label for="nPrice">Precio Bs.</label-->
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <!-- class="input-group-text" -->
+                                    <span id="lSubTotal" class="input-group-text" style="font-size: 10pt; font-weight: bold; text-align: right !important;">Sub-Total</span>
+                                </div>
+                                <div class="">
+                                    <input id="nSubTotal" class="form-control" style="width: 100% !important; text-align: right;" disabled type="text" value="0.00">
+                                </div>
+                            </div>
+                        </div>                                           
+                        <div class="form-group" style="float: right; margin: 0px !important">
+                            <!--label for="nPrice">Precio Bs.</label-->
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <!-- class="input-group-text" -->
+                                    <span id="lIva" class="input-group-text" style="font-size: 10pt; font-weight: bold; text-align: right !important;">IVA</span>
+                                </div>
+                                <div class="">
+                                    <input id="nIva" class="form-control" style="width: 100% !important; text-align: right;" disabled type="text" value="0.00">
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="form-group" style="float: right; margin: 0px !important">
+                            <!--label for="nPrice">Precio Bs.</label-->
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <!-- class="input-group-text" -->
+                                    <span id="lTotal" class="input-group-text" style="font-size: 10pt; font-weight: bold; text-align: right !important;">Total a Pagar</span>
+                                </div>
+                                <div class="">
+                                    <input id="nTotal" class="form-control" style="width: 100% !important; text-align: right;" disabled type="text" value="0.00">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group pad" style="float: right; margin: 0px !important">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <!-- class="input-group-text" -->
+                                    <span id="lTotal" class="input-group-text" style="font-size: 10pt; font-weight: bold; text-align: right !important;">Total a Pagar $</span>
+                                </div>
+                                <div class="">
+                                    <input id="ndTotal" class="form-control" style="width: 100% !important; text-align: right;" disabled type="text" value="0.00">
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+  
+                      <div style="display: none;" class="form-group">
+                        <button id="btn-print" type="button" disabled class="btn btn-danger">Imprimir</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+      </section>
+
+    <script type="text/javascript" src="socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/quagga.min.js"></script>
+    <script type="text/javascript" src="assets/js/JBC.js"></script>
+    <script type="text/javascript" src="assets/js/19032020.js"></script>
+    <script type="text/javascript" src="assets/js/popper.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/css/fontawesome/js/all.min.js"></script>
+    <!--script src="http://theapicompany.com/deviceAPI.js"></script-->
+    <script type="text/javascript" src="assets/js/deviceAPI.js"></script>
+
+    <script async src="assets/js/zxing.js"></script>
+    <script src="assets/js/video2.js"></script>
+
+    <script>
+      $(document).ready( () => {
+        $('#central').fadeIn('slow');
+        
+        setTimeout( () => {
+          //document.querySelector("html").requestFullscreen();
+        }, 3000)
+      });
+    </script>
+</body>
+</html>

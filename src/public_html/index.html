@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Verificador de Precio | BioMercados</title>
+    <!--script type="text/javascript" src="assets/js/pace.min.js"></script-->
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/pace.css">
+    <link rel="stylesheet/less" type="text/css" href="assets/css/scan.less" >
+    <script type="text/javascript" src="assets/js/less.js"></script>
+    <script>
+      function full() { document.querySelector("html").requestFullscreen(); }
+    </script>
+</head>
+<body>
+  <div class="reconnect">
+    <button style="width: 20%; font-size: 18pt;" id="btxReconnect" class="btn btn-danger"><i class="fas fa-redo-alt"></i> Reconectar</button>
+  </div>
+  <div id="resultado"></div>
+  <!-- QUAGGA SCANNER INIT-->
+    <!--div id="camera" style="width: 400px;">
+      <div class="close">
+        <button class="btn-danger">X</button>
+      </div>
+      <video muted autoplay playsinline="true"></video>
+      <canvas class="drawingBuffer"></canvas>            
+    </!--div>
+    <!-- QUAGGA SCANNER END -->
+
+    <!-- ZXING SCANNER INIT -->
+    <div id="camera" style="width: 400px;">
+      <div style="position: fixed; visibility: hidden;" class="select">
+        <label for="videoSource">Video source: </label><select id="videoSource"></select>
+      </div>
+      <button id="go" style="position: fixed; visibility: hidden;">Read Barcode</button>
+      <div>
+        <video muted autoplay id="video" playsinline="true"></video>
+        <canvas id="pcCanvas" width="640" height="480" style="display: none; float: bottom;"></canvas>
+        <canvas id="mobileCanvas" width="240" height="320" style="display: none; float: bottom;"></canvas>
+      </div>
+    </div>
+    <!-- ZXING SCANNER END-->
+
+    <div class="ocrloader">
+      <em></em>
+      <div>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i>
+      </div>
+      <div >
+        <span class="line"></span>
+      </div>
+    </div>
+
+          <div class="parentc"></div>
+          <div class="close"">
+            <button class="btn-danger"">X</button>
+          </div>
+          <div class="preloader-scan">
+            <ul>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              
+              <div class="diode">
+                
+                
+              </div>
+              
+              <div class="parentv"></div>
+            </ul>
+          </div>
+   
+
+      <section id="centrals">
+        <!--ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#profile">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Separated link</a>
+            </div>
+          </li>
+        </ul-->
+        <div id="myTabContent" class="tab-content">
+          <div class="tab-pane fade show active" id="home">
+                  
+              <div style="width: 93%; text-align: left; position: relative; margin-left: 10%; margin-right: 30%;">
+                <div id="titleapp" style="text-align: center; padding: 5%; margin-left: -10% !important;"><H1>VERIFICADOR DE PRECIOS</H1></div>
+                  <div style="width: 80%">
+                      <div class="form-group">
+                        <div id="PrintHabTab" class="custom-control custom-switch">
+                          <input type="checkbox" class="custom-control-input" id="PrintHab">
+                          <label class="custom-control-label" for="PrintHab">Habilitar Impresion Automática</label>
+                        </div>
+                        <div style="display: none;" id="jszOrg" class="form-group">
+                          <label for="szOrg">Organización</label>
+                          <select id="szOrg" class="custom-select">
+                            <option value="10.10.10.10">Tienda 01 Mañongo</option>
+                            <option value="10.20.10.10">Tienda 02 Paraparal</option>
+                            <option value="10.30.10.10">Tienda 03 Santa Cecilia</option>
+                            <option value="10.40.10.10">Tienda 04 Cabudare</option>
+                            <option value="10.60.10.10">Tienda 06 Bio En Casa</option>
+                            <option value="10.1.10.10">Tienda Express La Granja</option>
+                            <option value="10.2.10.10">Tienda Express El Bosque</option>
+                          </select>
+                        </div>                          
+
+                          <label for="szCode">Codigo</label>
+                          <input id="szCode" type="text" class="form-control" style="width: 100%;">
+                          <button id="btn-send" type="button" class="btn btn-success" style="width: 100%;">Escanear Codigo</button>
+                          <div id="forszCodeinv" class="invalid-feedback">Por favor, Intente nuevamente.</div>
+                          <div id="forszCodev" class="valid-feedback">Producto encontrado con exito.</div>
+                      </div>
+                      <div class="form-group">
+                          <label for="szCode">Descripci&oacute;n</label>
+                          <input id="szDesc" type="text" readonly class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <!--label for="nPrice">Precio Bs.</label-->
+                          <div class="">
+                              <div class="input-group-prepend">
+                                <!-- class="input-group-text" -->
+                                  <span id="nPrice" class="">Bs.</span>
+                              </div>
+                              <div class="">
+                                  <input id="prcbs" class="form-control" style="width: 100% !important;" disabled type="text" value="0.00">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <!--label class="control-label">Precio USD</label-->
+                          <div class="form-group">
+                            <div class="">
+                              <div class="input-group-prepend">
+                                <span class="">USD</span>
+                              </div>
+                              
+                              <div class="">
+                                <input id="prcusd" class="form-control" style="width: 100% !important;" disabled type="text" value="0.00">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <!--label for="nTasa">Tasa</label-->
+                          <!-- input-group mb-3 -->
+                          <div class="">
+                            <!-- input-group-prepend -->
+                              <div class="">
+                                  <span id="nTasa" class="">Tasa / Bs.</span>
+                              </div>
+                              <div class="input-group-append">
+                                  <input id="ntasa" class="form-control" style="width: 100% !important;" disabled type="text" value="0.00">
+                              </div>
+                          </div>
+                      </div>
+  
+                      <div class="form-group">
+                        <button id="btn-print" type="button" disabled class="btn btn-danger" style="">Imprimir</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="tab-pane fade" id="profile">
+            <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+          </div>
+          <div class="tab-pane fade" id="dropdown1">
+            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork.</p>
+          </div>
+          <div class="tab-pane fade" id="dropdown2">
+            <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater.</p>
+          </div>
+        </div>
+      </section>
+
+    <script type="text/javascript" src="socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/quagga.min.js"></script>
+    <script type="text/javascript" src="assets/js/27122019.js"></script>
+    <script type="text/javascript" src="assets/js/popper.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <!--script src="http://theapicompany.com/deviceAPI.js"></script-->
+    <script type="text/javascript" src="assets/js/deviceAPI.js"></script>
+
+    <script async src="assets/js/zxing.js"></script>
+    <!--script src="assets/js/video2.js"></script--> <!-- MODIFICADO PARA IPHONE -->
+    <script src="assets/js/video.js"></script>
+
+    <script>
+      $(document).ready( () => {
+        $('#centrals').fadeIn('slow');
+        
+        setTimeout( () => {
+          //document.querySelector("html").requestFullscreen();
+        }, 3000)
+      });
+    </script>
+</body>
+</html>

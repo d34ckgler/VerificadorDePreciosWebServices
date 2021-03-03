@@ -1,0 +1,157 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <meta http-equiv="x-ua-compatible" content="IE=7">
+    <title>Verificador de Precio | BioMercados</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+
+    <script type="text/javascript" src="assets/js/jquery-1.8.3.js"></script>
+    <style>
+        @font-face {
+            font-family: 'Bree';
+            src: url('assets/css/font/BreeRegular.otf');
+        }
+
+        * {
+            font-family: "Bree";
+            font-weight: normal;
+        }
+
+        body {
+            background-color: white !important;
+            background: url(assets/images/bio_MK500.jpg);
+            background-size: 100% 70%;
+            background-repeat: no-repeat;
+            background-position: 0px -40px;
+        }
+
+        input[type="text"] {
+            color: black !important;
+            font-size: 14pt !important;
+            font-weight: bold !important;
+        }
+
+        /*#szCode,*/
+        #szDesc,
+        #prcbs,
+        #prcusd,
+        #ntasa {
+            color: black !important;
+            font-size: 20pt !important;
+            font-weight: bold !important;
+            width: 120% !important;
+            background: transparent !important;
+            border: none;
+            text-align: center;
+        }
+
+        * {
+            overflow: hidden;
+        }
+
+        label {
+            font-weight: bold !important;
+            font-size: 14pt;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- PUBLICIDAD -->
+    <div id="publishing" style="width: 480px; height: 280px; background-image: url(assets/images/bio-mercado-santa-cecilia_gl_t1.jpg); background-size: 480px 280px !important; z-index: 999;"></div>
+    </div>
+        <di style="padding-left: 30px;">
+            <input style="font-size: 18pt; position: absolute; left: 2%; top: 8%; width: 100% !important;" id="szDesc" type="text" readonly class="form-control">
+        </div>
+        <div id="isprice" style="padding-left: 50px; padding-right: 120px;">
+            <input id="prcbs" class="form-control" style="position: absolute; left: 3%; top: 30%; width: 100% !important;" readonly
+                                        type="text" value="">
+            <input style="position: absolute; left: -2.5%; top: 55%; color: rgb(123, 145, 123);" id="prcusd" class="form-control"
+                                            style="width: 100% !important;" readonly type="text" value="">
+            <input  style="width: 100%; position: absolute; left: 12%; top: 75%; color: green !important;" id="ntasa" class="form-control"
+                style="width: 100% !important;" readonly type="text" value="">
+        </div>
+    </section>
+
+    <script type="text/javascript">
+        var szDesc = document.getElementById("szDesc");
+        var prcbs = document.getElementById("prcbs");
+        var prcusd = document.getElementById("prcusd");
+        var ntasa = document.getElementById("ntasa");
+        var publishing = document.getElementById("publishing");
+        var isprice = document.getElementById("isprice");
+
+        setTimeout(function () {
+            document.location.reload();
+        }, 10000)
+
+        var codigo = "";
+        $(document).on('keypress', function (e) {
+            if (e.key >= 0 && e.key < 9) {
+                //codigo = codigo + e.key;
+            }
+            if (e.which == 13) {
+                $(isprice).fadeIn('fast');
+                $(publishing).fadeOut('fast');
+                ScanBar(codigo);
+            }
+        });
+
+        $.ajaxSetup({
+            // Disable caching of AJAX responses
+            cache: false
+        });
+
+        $(document).keypress(function(event) {
+            var letter = event.which || event.keyCode;
+            codigo += String.fromCharCode(letter);
+        });
+
+        var flag = false;
+        function ScanBar(sku) {
+            codigo = '';
+            if (flag) return;
+            
+            $.ajax({
+                url: "http://10.10.100.104/jsonp/" + sku + "/10.10.10.10",
+                context: document.body,
+                statusCode: {
+                    404: function () {
+                        szDesc.value = "Producto no encontrado";
+                        setTimeout(function () {
+                            $(isprice).fadeOut('fast');
+                            $(publishing).fadeIn('fast');
+                            szDesc.value = "";
+                            window.close();
+                        }, 2000)
+                    }
+                },
+                success: function (data, i) {
+                    flag = true;
+                    szDesc.value = data[0].C_DESCRI;
+                    prcbs.value = data[0].format;
+                    ntasa.value = data[0]['tasaf'];
+                    prcusd.value = data[0].prcusd;
+                    //szCode.value = "";
+                    setTimeout(function () {
+                        $(publishing).show('fast');
+                        codigo = "";
+                        szDesc.value = "";
+                        prcbs.value = '';
+                        ntasa.value = '';
+                        prcusd.value = '';
+                        flag = false
+                    }, 3000);
+                }
+            }).done(function (data) {
+                data = null;
+            });
+        }
+
+        $('body').css("background-size", "cover");
+    </script>
+</body>
+
+</html>
