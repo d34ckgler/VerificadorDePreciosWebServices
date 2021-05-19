@@ -70,7 +70,7 @@ function ScanBar(sku) {
     if (flag) return;
 
     $.ajax({
-        url: "http://10.10.100.104/jsonp/" + sku + "/10.10.10.10",
+        url: "/jsonp/" + sku + "/10.10.10.10",
         context: document.body,
         statusCode: {
             404: function() {
@@ -84,39 +84,36 @@ function ScanBar(sku) {
         },
         success: function(data, i) {
             flag = true;
+            $('.awesome').hide('fast', () => {});
+
             szDesc.value = data[0].C_DESCRI;
             prcbs.value = data[0].format;
             ntasa.value = data[0]['tasaf'];
             prcusd.value = data[0].prcusd;
+
             //szCode.value = "";
             setTimeout(function() {
-                $(publishing).show('fast');
+                $(publishing).fadeIn('fast');
                 codigo = "";
                 szDesc.value = "";
                 prcbs.value = '';
                 ntasa.value = '';
                 prcusd.value = '';
+                $('.awesome').fadeIn('fast');
                 flag = false
             }, 3000);
-        }
-    }).done(function(data) {
-        //if (data == undefined || data == null) return szDesc.value = "Producto no existe en Inventario";
-        /*flag = true;
-        szDesc.value = data[0].C_DESCRI
-        prcbs.value = data[0].format
-        ntasa.value = data[0]['tasaf']
-        prcusd.value = data[0].prcusd
-
-        setTimeout(function () {
-            //szCode.removeAttribute('disabled');
-            szCode.value = "";
+        },
+        error: function() {
+            $(publishing).fadeIn('fast');
             codigo = "";
             szDesc.value = "";
             prcbs.value = '';
             ntasa.value = '';
             prcusd.value = '';
+            $('.awesome').fadeOut('fast');
             flag = false
-        }, 7000);*/
+        }
+    }).done(function(data) {
         data = null;
     });
 }
