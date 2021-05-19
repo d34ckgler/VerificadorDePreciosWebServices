@@ -1,0 +1,94 @@
+@font-face {
+    font-family: 'Bree';
+    src: url('../css/font/BreeRegular.otf');
+}
+
+* {
+    font-family: "Bree";
+    font-weight: normal;
+    transition: 300ms ease-in-out all;
+}
+
+.App-header {
+    /* background-color: #282c34; */
+    min-height: 100vh;
+    display: flex;
+    /* flex-direction: column; */
+    flex-direction: column;
+    justify-content: space-around;
+    padding-top: 3%;
+    /* flex-direction: row; */
+    align-items: left;
+    justify-content: space-between;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    overflow-x: hidden;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+.footer {
+    position: fixed;
+    align-self: flex-end;
+    /* align-self: flex-end; */
+    /* align-self: flex-end; */
+    left: 0;
+    bottom: 0;
+    background-image: url(../images/bio.png) !important;
+    width: 100vmax;
+    height: 50vmin;
+    background-size: cover;
+    background-position: 0vmin 0vmin;
+    background-repeat: no-repeat;
+}
+
+label {
+    font-size: calc(4px + 6vmin);
+    color: #000
+}
+
+.holders {
+    color: orangered !important;
+    font-size: 5vmin;
+    text-align: center;
+    border: none;
+}
+
+.form-control:focus {
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+#publishing {
+    /* display: none; */
+    position: fixed;
+    width: 100vmax;
+    height: 100vh;
+    background-image: url(../images/bio-mercado-santa-cecilia_gl.jpg);
+    background-size: 100vmax 100vmin;
+    z-index: 999;
+}
+
+@media only screen and (max-width: 650px) and (min-width: 5px) {
+    #publishing {
+        /* display: none; */
+        position: fixed;
+        width: 100vmax;
+        height: 100vh;
+        background-image: url(../images/bio-mercado-santa-cecilia_gl.jpg);
+        background-size: 100vmax 100vmax;
+        z-index: 999;
+    }
+}
+
+.tasa {
+    color: green !important
+}
