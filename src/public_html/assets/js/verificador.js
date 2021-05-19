@@ -11,13 +11,13 @@ setTimeout(function() {
 
 var codigo = "";
 $(document).on('keypress', function(e) {
-    if (e.key >= 0 && e.key < 9) {
-        //codigo = codigo + e.key;
-    }
-    if (e.which == 13) {
+    // if (e.key >= 0 && e.key < 9) {
+    //     //codigo = codigo + e.key;
+    // }
+
+    if (codigo.length > 0 && e.which == 13) {
         $(isprice).fadeIn('fast');
         $(publishing).fadeOut('fast');
-        //szCode.value = codigo;
         //Toggle fullscreen off, activate it
         if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
             if (document.documentElement.requestFullscreen) {
@@ -29,24 +29,8 @@ $(document).on('keypress', function(e) {
             } else if (document.documentElement.msRequestFullscreen) {
                 document.documentElement.msRequestFullscreen(); // IE
             }
-
             //Toggle fullscreen on, exit fullscreen
         }
-        /* else {
-               
-                           if (document.exitFullscreen) {
-                               document.exitFullscreen();
-                           } else if (document.msExitFullscreen) {
-                               document.msExitFullscreen();
-                           } else if (document.mozCancelFullScreen) {
-                               document.mozCancelFullScreen();
-                           } else if (document.webkitExitFullscreen) {
-                               document.webkitExitFullscreen();
-                           }
-                       }*/
-        /*if (szCode.value == "exit") {
-            window.close();
-        }*/
         ScanBar(codigo);
     }
 });
@@ -58,9 +42,7 @@ $.ajaxSetup({
 
 $(document).keypress(function(event) {
     var letter = event.which || event.keyCode;
-    //alert('Handler for .keypress() called. - ' + String.fromCharCode(letter));
     codigo = codigo + String.fromCharCode(letter);
-    console.info(String.fromCharCode(letter))
 });
 
 var flag = false;
@@ -69,41 +51,36 @@ function ScanBar(sku) {
     codigo = '';
     if (flag) return;
 
-    $.ajax({
-        url: "/jsonp/" + sku + "/10.10.10.10",
-        context: document.body,
-        statusCode: {
-            404: function() {
+    fetch(`/jsonp/${sku}/10.10.10.1`)
+        .then(response => response.json()).then(data => {
+            if (data['statusCode'] != undefined) {
                 szDesc.value = "Producto no encontrado";
                 setTimeout(function() {
                     $(isprice).fadeOut('fast');
                     $(publishing).fadeIn('fast');
                     szDesc.value = "";
-                }, 2000)
+                }, 2000);
+            } else {
+                flag = true;
+                $('.awesome').hide('fast', () => {});
+
+                szDesc.value = data[0].C_DESCRI;
+                prcbs.value = data[0].format;
+                ntasa.value = data[0]['tasaf'];
+                prcusd.value = data[0].prcusd;
+
+                setTimeout(function() {
+                    $(publishing).fadeIn('fast');
+                    codigo = "";
+                    szDesc.value = "";
+                    prcbs.value = '';
+                    ntasa.value = '';
+                    prcusd.value = '';
+                    $('.awesome').fadeIn('fast');
+                    flag = false
+                }, 3000);
             }
-        },
-        success: function(data, i) {
-            flag = true;
-            $('.awesome').hide('fast', () => {});
-
-            szDesc.value = data[0].C_DESCRI;
-            prcbs.value = data[0].format;
-            ntasa.value = data[0]['tasaf'];
-            prcusd.value = data[0].prcusd;
-
-            //szCode.value = "";
-            setTimeout(function() {
-                $(publishing).fadeIn('fast');
-                codigo = "";
-                szDesc.value = "";
-                prcbs.value = '';
-                ntasa.value = '';
-                prcusd.value = '';
-                $('.awesome').fadeIn('fast');
-                flag = false
-            }, 3000);
-        },
-        error: function() {
+        }).catch(err => {
             $(publishing).fadeIn('fast');
             codigo = "";
             szDesc.value = "";
@@ -112,11 +89,54 @@ function ScanBar(sku) {
             prcusd.value = '';
             $('.awesome').fadeOut('fast');
             flag = false
-        }
-    }).done(function(data) {
-        data = null;
-    });
-}
+        })
 
-//szCode.focus();
+    // $.ajax({
+    //     url: "/jsonp/" + sku + "/10.10.10.10",
+    //     context: document.body,
+    //     statusCode: {
+    //         404: function() {
+    //             szDesc.value = "Producto no encontrado";
+    //             setTimeout(function() {
+    //                 $(isprice).fadeOut('fast');
+    //                 $(publishing).fadeIn('fast');
+    //                 szDesc.value = "";
+    //             }, 2000);
+    //         }
+    //     },
+    //     success: function(data, i) {
+    //         flag = true;
+    //         $('.awesome').hide('fast', () => {});
+
+    //         szDesc.value = data[0].C_DESCRI;
+    //         prcbs.value = data[0].format;
+    //         ntasa.value = data[0]['tasaf'];
+    //         prcusd.value = data[0].prcusd;
+
+    //         //szCode.value = "";
+    //         setTimeout(function() {
+    //             $(publishing).fadeIn('fast');
+    //             codigo = "";
+    //             szDesc.value = "";
+    //             prcbs.value = '';
+    //             ntasa.value = '';
+    //             prcusd.value = '';
+    //             $('.awesome').fadeIn('fast');
+    //             flag = false
+    //         }, 3000);
+    //     },
+    //     error: function() {
+    //         $(publishing).fadeIn('fast');
+    //         codigo = "";
+    //         szDesc.value = "";
+    //         prcbs.value = '';
+    //         ntasa.value = '';
+    //         prcusd.value = '';
+    //         $('.awesome').fadeOut('fast');
+    //         flag = false
+    //     }
+    // }).done(function(data) {
+    //     data = null;
+    // });
+}
 $('body').css("background-size", "cover");
