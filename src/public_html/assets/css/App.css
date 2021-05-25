@@ -61,14 +61,13 @@ label {
     text-align: center;
     border-bottom-right-radius: 100vmin !important;
     width: 70% !important;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .form-control:focus {
     border-color: inherit;
     -webkit-box-shadow: none;
     box-shadow: none;
-    border-radius: 20px !important;
-    outline: transparent !important;
 }
 
 body {
