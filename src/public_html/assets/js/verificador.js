@@ -35,10 +35,10 @@ $(document).on('keypress', function(e) {
     }
 });
 
-$.ajaxSetup({
-    // Disable caching of AJAX responses
-    cache: false
-});
+// $.ajaxSetup({
+// Disable caching of AJAX responses
+//     cache: false
+// });
 
 $(document).keypress(function(event) {
     var letter = event.which || event.keyCode;
@@ -51,10 +51,20 @@ function ScanBar(sku) {
     codigo = '';
     if (flag) return;
 
-    fetch(`/jsonp/${sku}/10.10.10.1`)
+    fetch(`/jsonp/${sku}/10.10.10.1`, {
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
         .then(response => response.json()).then(data => {
             if (data['statusCode'] != undefined) {
-                szDesc.value = "Producto no encontrado";
+                $('.awesome').hide('fast', () => {
+                    szDesc.value = "Producto no encontrado";
+                });
+
                 setTimeout(function() {
                     $(isprice).fadeOut('fast');
                     $(publishing).fadeIn('fast');

@@ -1,6 +1,6 @@
 import { disconnect } from "cluster";
 
-const MobileDetect = require('mobile-detect');
+// const MobileDetect = require('mobile-detect');
 const clr = require('colors');
 let device = null;
 
@@ -36,9 +36,9 @@ module.exports = class io {
                     });
                 });
             });
-            socket.on('log', data => {
-                device = new MobileDetect(data);
-            })
+            // socket.on('log', data => {
+            //     device = new MobileDetect(data);
+            // })
 
             _this.io.of('/').clients((error, clients) => {
                 if (error) throw error;

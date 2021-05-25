@@ -23,6 +23,7 @@
     font-size: calc(10px + 2vmin);
     color: white;
     overflow-x: hidden;
+    z-index: 30;
 }
 
 .content {
@@ -41,7 +42,7 @@
     /* align-self: flex-end; */
     left: 0;
     bottom: 0;
-    background-image: url(../images/bio.png) !important;
+    background-image: url(../images/Verificadores-de-Precios_Fondo.jpg) !important;
     width: 100vmax;
     height: 50vmin;
     background-size: cover;
@@ -58,13 +59,26 @@ label {
     color: orangered !important;
     font-size: 5vmin;
     text-align: center;
-    border: none;
+    border-bottom-right-radius: 100vmin !important;
+    width: 70% !important;
 }
 
 .form-control:focus {
     border-color: inherit;
     -webkit-box-shadow: none;
     box-shadow: none;
+    border-radius: 20px !important;
+    outline: transparent !important;
+}
+
+body {
+    /* display: none; */
+    position: fixed;
+    width: 100vmax;
+    height: 100vh;
+    background-image: url(../images/Verificadores-de-Precios_Fondo.jpg);
+    background-size: 100vmax 100vmin;
+    z-index: 10;
 }
 
 #publishing {
@@ -72,9 +86,9 @@ label {
     position: fixed;
     width: 100vmax;
     height: 100vh;
-    background-image: url(../images/bio-mercado-santa-cecilia_gl.jpg);
+    background-image: url(../images/Verificadores-de-Precios_Consulte-su-precio.jpg);
     background-size: 100vmax 100vmin;
-    z-index: 999;
+    z-index: 20;
 }
 
 @media only screen and (max-width: 650px) and (min-width: 5px) {
@@ -83,9 +97,19 @@ label {
         position: fixed;
         width: 100vmax;
         height: 100vh;
-        background-image: url(../images/bio-mercado-santa-cecilia_gl.jpg);
-        background-size: 100vmax 100vmax;
-        z-index: 999;
+        background-image: url(../images/Verificadores-de-Precios_Consulte-su-precio.jpg);
+        background-size: 100vmax 100vmin;
+        z-index: 20;
+    }
+    #verificador {
+        /* display: none; */
+        position: fixed;
+        width: 100vmax;
+        height: 100vh;
+        background-image: url(../images/Verificadores-de-Precios_Fondo.jpg);
+        background-size: 100vmax 100%;
+        background-repeat: no-repeat !important;
+        z-index: -1;
     }
 }
 
@@ -95,4 +119,11 @@ label {
 
 .awesome {
     color: #000;
+}
+
+.App-header label {
+    color: #fff;
+    align-self: baseline !important;
+    margin-left: 15%;
+    /* align-content: space-around; */
 }
