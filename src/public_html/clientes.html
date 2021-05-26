@@ -31,6 +31,12 @@
             background-repeat: no-repeat;
         }
         
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+        }
+        
         input[type="text"] {
             color: black !important;
             font-size: 14pt !important;
@@ -64,7 +70,12 @@
 
 <body>
     <!-- PUBLICIDAD -->
-    <div id="publishing" style="width: 100%; height: 100%; background-image: url(assets/images/bio-mercado-santa-cecilia_gl.jpg); background-size: cover; z-index: 999;">
+    <div id="publishing" style="position: relative; height: 100%; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(
+        src='assets/images/bio-mercado-santa-cecilia_gl.jpg',
+        sizingMethod='scale'); z-index: 999;
+        -ms-filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(
+        src='assets/images/bio-mercado-santa-cecilia_gl.jpg',
+        sizingMethod='scale'); z-index: 999;">
     </div>
 
     <div class="form-group">

@@ -83,10 +83,10 @@ body {
 #publishing {
     /* display: none; */
     position: fixed;
-    width: 100vmax;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     background-image: url(../images/Verificadores-de-Precios_Consulte-su-precio.jpg);
-    background-size: 100vmax 100vmin;
+    background-size: 100% 100%;
     z-index: 20;
 }
 
@@ -94,10 +94,11 @@ body {
     #publishing {
         /* display: none; */
         position: fixed;
-        width: 100vmax;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         background-image: url(../images/Verificadores-de-Precios_Consulte-su-precio.jpg);
-        background-size: 100vmax 100vmin;
+        background-size: 100% 100%;
+        background-repeat: no-repeat !important;
         z-index: 20;
     }
     #verificador {
