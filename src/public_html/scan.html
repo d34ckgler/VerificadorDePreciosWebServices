@@ -26,17 +26,9 @@
         
         body {
             background-color: white !important;
-            background-image: url(assets/images/bio.jpg);
-            background-repeat: no-repeat;
+            background: url(assets/images/bio.jpg);
             background-size: 100% 100%;
             background-repeat: no-repeat;
-        }
-        
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
         }
         
         input[type="text"] {
@@ -67,23 +59,12 @@
             font-weight: bold !important;
             font-size: 14pt;
         }
-        
-        #publishing {
-            width: 100%;
-            height: 100%;
-            background-image: url(assets/images/bio-mercado-santa-cecilia_gl.jpg);
-            background-size: cover;
-            filter: progid: DXImageTransform.Microsoft.AlphaImageLoader( src='assets/images/fondo.jpg', sizingMethod='scale');
-            z-index: 999;
-            -ms-filter: progid: DXImageTransform.Microsoft.AlphaImageLoader( src='assets/images/fondo.jpg', sizingMethod='scale');
-            z-index: 999;
-        }
     </style>
 </head>
 
 <body>
     <!-- PUBLICIDAD -->
-    <div id="publishing">
+    <div id="publishing" style="width: 100%; height: 100%; background-image: url(assets/images/bio-mercado-santa-cecilia_gl.jpg); background-size: cover; z-index: 999;">
     </div>
     <di style="padding-left: 30px;">
         <input style="font-size: 18pt; position: absolute; left: 2%; top: 15%; width: 100% !important;" id="szDesc" type="text" readonly class="form-control">
