@@ -42,7 +42,8 @@ module.exports = function(app) {
     });
 
     app.get('/jsonp/:code/:org', (req,res) => {
-        let sql = require('./secure/con-server');
+        // let sql = require('./secure/con-server');
+        import { mssql } from './secure/con-server';
         sql = new sql(req.params.org);
         sql.connect().then( r => {
             console.log('Conexion establecida con servidor de base de datos mediante GET.');
@@ -50,6 +51,7 @@ module.exports = function(app) {
                 if(r.recordset == undefined) return res.status(404).send({statusCode: 404});
                 if(r.recordset.length > 0)
                     {
+                        r.recordset[0]['C_DESCRI'] = r.recordset[0]['C_DESCRI'].replace('/', '-');
                         Object.assign(r.recordset[0], { format: format(r.recordset[0].precio, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',')});
                         Object.assign(r.recordset[0], { tasaf: format(r.recordset[0].tasa, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',')});
                     }
