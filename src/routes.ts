@@ -23,17 +23,30 @@ function getOrg(org) {
         case "Tienda 04 Cabudare":
             return '10.40.10.1';
         break;
+        case "Tienda E01 La Granja":
+            return '10.1.10.1';
+        break;
+        case "Tienda E02 El Bosque":
+            return '10.2.10.1';
+        break;
     }
 }
 
 module.exports = function(app) {
-    app.get('/json/:code/:org', (req,res) => {
-        return res.status(200).send({status: 404, message: "Disabled"});
+    app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+        next();
+        });
+        
+    app.get('/getProduct/:code/:org', (req,res) => {
+        //return res.status(200).send({status: 404, message: "Disabled"});
         let sql = require('./secure/con-server');
         sql = new sql(req.params.org);
         sql.connect().then( r => {
             console.log('Conexion establecida con servidor de base de datos mediante GET.');
-            sql.getItemInfo2(req.params.code).then( r => { 
+            console.info(`IP Consultor: ${req.params.org}`);
+            sql.getItemiDempiere(req.params.code).then( r => { 
                 console.log('Producto Obtenido...');
                 res.send(r.recordset);
                 sql.disconnect();
@@ -46,6 +59,7 @@ module.exports = function(app) {
         sql = new sql(req.params.org);
         sql.connect().then( r => {
             console.log('Conexion establecida con servidor de base de datos mediante GET.');
+            console.info(`IP Consultor: ${req.params.org}`);
             sql.getItemInfo2(req.params.code).then( r => {
                 if(r.recordset == undefined) return res.status(404).send({statusCode: 404});
                 if(r.recordset.length > 0)
@@ -60,10 +74,30 @@ module.exports = function(app) {
         });
     });
 
-    app.get('/printzpl/:args', (req,res) => {
+    app.get('/bcv/:code/:org', (req,res) => {
+        let sql = require('./secure/con-server');
+        sql = new sql(req.params.org);
+        sql.connect().then( r => {
+            console.log('Conexion establecida con servidor de base de datos mediante GET.');
+            console.info(`IP Consultor: ${req.params.org}`);
+            sql.getItemInfo3(req.params.code).then( r => {
+                if(r.recordset == undefined) return res.status(404).send({statusCode: 404});
+                if(r.recordset.length > 0)
+                    {
+                        Object.assign(r.recordset[0], { format: format(r.recordset[0].precio, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',')});
+                        Object.assign(r.recordset[0], { tasaf: format(r.recordset[0].tasa, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',')});
+                    }
+                
+                res.send(r.recordset);
+                sql.disconnect();
+            });
+        });
+    });
+
+    app.get('/printProductZpl/:args', (req,res) => {
         if(Object.keys(req.params).length <= 0) return;
 
-        return res.send([{STATUS: "ERROR", msg: "Impresión de Habladores Deshabilitada"}]);
+        //return res.send([{STATUS: "ERROR", msg: "Impresión de Habladores Deshabilitada"}]);
 
         let args = JSON.parse(req.params.args);
         //res.send(args);
@@ -80,18 +114,27 @@ module.exports = function(app) {
     });
 
     app.get('/api/v2/sendItem/:org/:codigo', (req, res, next) => {
-        if(req.params.org === null || req.params.codigo === null) {
+        if(req.params.org == null || req.params.codigo == null) {
             res.status(200).send('Parametros incorrectos.');
             return next();
         }
+
+        if(req.params.org === 'Seleccione una tienda') {
+            console.info(req.params.org);
+            return res.status(502).send("Debe seleccionar una organizacion valida!");
+        }
+
+        console.info('Enviando Codigo a balanza: (%s) para la organizacion: (%s)', req.params.codigo, req.params.org);
 
         let sql = require('./secure/con-server');
         sql = new sql(getOrg(req.params.org));
 
         sql.sendItem(req.params.codigo).then( (response) => {
             res.status(200).send(response);
-            return next();
+            //return next();
         }).catch( (e) => {
+            res.status(502).send(e);
+            //return next();
             console.error(e);
         });
     });

@@ -149,17 +149,60 @@ module.exports = class mssql {
         });
     }
 
+    getItemInfo3(szCode: string) {
+        let _this = this;
+        return new Promise(async (rs, rj) => {
+            // query to the database and get the records
+            await _this.connect();
+            if (_this._pool == null) return;
+            _this.request = new sql.Request(_this._pool);
+            _this.request.query("SELECT TOP(1) C.c_codigo, C.c_codnasa, P.n_precio1 as price, (SELECT CONVERT(DECIMAL(10,2),((CASE P.n_impuesto1 WHEN 16 THEN (P.n_precio1 * 1.16) WHEN 8 THEN (P.n_precio1 * 1.08) ELSE P.n_precio1 END)/(select 1804994.46 as n_factor  from vad10..MA_MONEDAS where c_codmoneda = '0000000004'))) AS prcusd FROM VAD20..MA_PRODUCTOS WHERE c_codigo = P.C_CODIGO) as prcusd, (SELECT 1804994.46 as n_factor FROM VAD10..MA_MONEDAS WHERE c_codmoneda = '0000000004') as tasa, (CASE P.n_impuesto1 WHEN 16 THEN (P.n_precio1 * 1.16) WHEN 8 THEN (P.n_precio1 * 1.08) ELSE P.n_precio1 END) as precio, P.n_impuesto1, (CASE P.n_impuesto1 WHEN 16 THEN (P.n_precio1 * 0.16) WHEN 8 THEN (P.n_precio1 * 0.08) ELSE '0.00' END) as impuesto, P.C_DESCRI FROM VAD20..MA_CODIGOS C INNER JOIN VAD20..MA_PRODUCTOS P ON  C.c_codnasa= P.C_CODIGO WHERE (C.c_codnasa = '" + szCode + "' OR C.c_codigo = '" + szCode + "') AND C.nu_intercambio = 0", (err, recordset) => {
+                _this.disconnect();
+                if (err) return console.log(err);
+                // send records as a response
+                if (recordset.recordset.length <= 0) return rs(false); //console.log('ERROR NO HAY PRODUCTO');;
+                let date = new Date();
+                let descri = 'Articulo / ' + recordset.recordset[0].C_DESCRI;
+                let sku = 'SKU / ' + recordset.recordset[0].c_codigo + color.bold.bgRed.yellow(' Fecha & Hora : ' + `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ${(date.getHours() > 11 && date.getHours() < 23) ? 'PM' : 'AM'}`);
+                console.log(color.bold.bgRed.yellow(descri), color.bold.bgRed.white(sku));
+                //recordset.recordset.price = _this.for
+                return rs(recordset);
+            });
+        });
+    }
+
     sendItem(szCode: string) {
         let _this = this;
         return new Promise( async (resolve, reject) => {
             await _this.connect();
             if(_this._pool == null) return;
             _this.request = new sql.Request(_this.pool);
-            _this.request.query(`UPDATE VAD20..bio_txtscale SET app_update = NULL WHERE c_codigo = '${szCode}'`, (err, recordset) => {
-                if(err) return reject(err.stack);
-
-                return resolve(`Codigo: (${szCode}), debe esperar 1 minutos para que el proceso lo envie a balanza.`);
-            });
+            if(szCode === 'allmsv') {
+                _this.request.query(`UPDATE VAD20.dbo.bio_txtscale SET app_update = NULL`, (err, recordset) => {
+                    if(err) return reject(err.stack.split('\n')[0]);
+                    return resolve(`👍 Masivo Enviado con exito❕`);
+                });
+            } else {
+                _this.request.query(`SELECT c_codnasa FROM VAD20.dbo.MA_CODIGOS_IDEMPIERE WHERE c_codigo = '${szCode}'`, (err, master) => {
+                    if(err) return reject(err.stack.split('\n')[0]);
+                    if(master.recordset.length > 0) {
+                        master = master.recordset[0];
+                        _this.request.query(`UPDATE VAD20..bio_txtscale SET app_update = NULL WHERE c_codigo = '${master.c_codnasa}'`, (err, recordset) => {
+                            if(err) return reject(err.stack.split('\n')[0]);
+                            _this.request.query(`SELECT C_DESCRI as name, n_precio1 as precio FROM VAD20..MA_PRODUCTOS WHERE c_codigo='${master.c_codnasa}'`, (err, data) => {
+                                if(err) return reject(err.stack.split('\n')[0]);
+                                if(data !== undefined && data.recordset !== null && data.recordset.length > 0)
+                                    return resolve(`👍 🔑Codigo: (${master.c_codnasa}) - 📄${data.recordset[0].name} 🏷️Precio: ${data.recordset[0].precio}, debe esperar 1 minutos para que el proceso lo envie a balanza❕`);
+                                else return resolve(`El 🔑Codigo (${master.c_codnasa}) no existe❕`);
+                            });
+                        });
+                    } else {
+                        return resolve(`El 🔑Codigo (${master.c_codnasa}) no existe❕`);
+                    }
+                    
+                    
+                });
+            }
         });
     }
 
@@ -222,7 +265,7 @@ module.exports = class mssql {
                 return ['TIENDA T03 SANTA CECILIA', 'HBT03', 1000005];
                 break;
             case 40:
-                return ['TIENDA T04 CABUDARE', 'HBT04', 1000006];
+                return ['TIENDA T04 CABUDARE', 'HABLADORES_T04', 1000006];
                 break;
             case 1:
                 return ['EXPRESS LA GRANJA', 'HBE01', 1000010];
