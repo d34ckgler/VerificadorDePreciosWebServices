@@ -41,6 +41,7 @@ module.exports = function(app) {
         
     app.get('/getProduct/:code/:org', (req,res) => {
         //return res.status(200).send({status: 404, message: "Disabled"});
+        
         let sql = require('./secure/con-server');
         sql = new sql(req.params.org);
         sql.connect().then( r => {

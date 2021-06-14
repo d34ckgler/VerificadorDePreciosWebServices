@@ -7,7 +7,7 @@ module.exports = class cups {
     getOrg(vlan:Number) {
         switch(vlan) {
             case 10:
-                return ['TIENDA T01 MANONGO', 'HBT01'];
+                return ['TIENDA T01 MANONGO', 'HABLADORES_T01'];
             break;
             case 20:
                 return ['TIENDA T02 PARAPARAL', 'HBT02'];
@@ -16,16 +16,16 @@ module.exports = class cups {
                 return ['TIENDA T03 SANTA CECILIA', 'HBT03'];
             break;
             case 40:
-                return ['TIENDA T04 CABUDARE', 'HBT04'];
+                return ['TIENDA T04 CABUDARE', 'HABLADORES_T04'];
             break;
             case 1:
-                return ['EXPRESS LA GRANJA', 'HBT03'];
+                return ['EXPRESS LA GRANJA', 'HBE01'];
             break;
             case 2:
-                return ['EXPRESS EL BOSQUE', 'HBT03'];
+                return ['EXPRESS EL BOSQUE', 'HBE02'];
             break;
             default: 
-                return ['TIENDA T01 MANONGO', 'HHS'];
+                return ['TIENDA T01 MANONGO', 'HABLADORES_T01'];
             break;
         }
     }
