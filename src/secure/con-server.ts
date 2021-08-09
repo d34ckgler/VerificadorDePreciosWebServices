@@ -22,7 +22,7 @@ module.exports = class mssql {
         let vlan = addr.split('.').slice(1, 2);
         this.addr = parseInt(vlan[0]);
 
-        this.config.server = (_this.addr == 60) ? `10.${_this.getVPN(_this.addr)}.100.19` : `10.${_this.getVPN(_this.addr)}.100.18`;
+        this.config.server = (_this.addr == 60) ? `10.${_this.getVPN(_this.addr)}.100.19` : `10.${_this.getVPN(_this.addr)}.100.104`;
     }
 
     getVPN(t: number) {
@@ -253,6 +253,105 @@ module.exports = class mssql {
         });
     }
 
+    // Bio Ruta
+    getInvoice(cInvoice: string) {
+        let _this = this;
+        return new Promise(async (rs, rj) => {
+            // query to the database and get the records
+            await _this.connect();
+            if (_this._pool == null) return;
+            _this.request = new sql.Request(_this._pool);
+            _this.request.query(`select P.C_Caja, P.C_Numero, P.F_Fecha, P.C_RIF, P.C_DESC_CLIENTE, MC.c_TELEFONO, P.cu_direccion_cliente from VAD20.dbo.MA_PAGOS P
+            left join VAD20.dbo.BioRuta BR on P.C_Numero = BR.C_Numero
+            LEFT join VAD10.dbo.MA_CLIENTES MC on mc.c_RIF = P.C_RIF
+            where P.C_Numero = '${cInvoice}'
+            and P.C_CONCEPTO = 'VEN'
+            and BR.id is null`, (err, recordset) => {
+                _this.disconnect();
+
+                if (err) return console.error(err);
+                // send records as a response
+                if (recordset.recordset.length <= 0) return rs(false);
+
+                return rs(recordset);
+            });
+        });
+    }
+
+    // Bio Zonas
+    getZones() {
+        let _this = this;
+        return new Promise(async (rs, rj) => {
+            // query to the database and get the records
+            await _this.connect();
+            if (_this._pool == null) return;
+            _this.request = new sql.Request(_this._pool);
+            _this.request.query(`select * from VAD20.dbo.BioZonas(NOLOCK)`, (err, recordset) => {
+                _this.disconnect();
+
+                if (err) return console.error(err);
+                // send records as a response
+                if (recordset.recordset.length <= 0) return rs(false);
+
+                return rs(recordset);
+            });
+        });
+    }
+
+    // Bio SubZonas
+    getSubZones() {
+        let _this = this;
+        return new Promise(async (rs, rj) => {
+            // query to the database and get the records
+            await _this.connect();
+            if (_this._pool == null) return;
+            _this.request = new sql.Request(_this._pool);
+            _this.request.query(`select bsz.id, bsz.subzone, bz.id as zones_id from VAD20.dbo.BioSubZonas bsz 
+            inner join VAD20.dbo.BioZonas bz on bsz.biozonas_id = bz.id`, (err, recordset) => {
+                _this.disconnect();
+
+                if (err) return console.error(err);
+                // send records as a response
+                if (recordset.recordset.length <= 0) return rs(false);
+
+                return rs(recordset);
+            });
+        });
+    }
+
+    // Bio Ruta
+    setInvoice(RouteInvoice: object) {
+        let _this = this;
+        return new Promise(async (rs, rj) => {
+            // query to the database and get the records
+            await _this.connect();
+            if (_this._pool == null) return;
+            _this.request = new sql.Request(_this._pool);
+            _this.request.query(`INSERT INTO [dbo].[BioRuta]
+            ([C_RIF]
+            ,[C_Numero]
+            ,[C_Direccion]
+            ,[N_Telefono]
+            ,[C_Email]
+            ,[biozonas_id]
+            ,[biosubzonas_id])
+      VALUES
+            ('${RouteInvoice['C_RIF']}'
+            ,'${RouteInvoice['C_Numero']}'
+            ,'${RouteInvoice['C_Direccion']}'
+            ,'${RouteInvoice['N_Telefono']}'
+            ,'${RouteInvoice['C_Email']}'
+            ,${RouteInvoice['zones_id']}
+            ,${RouteInvoice['subzones_id']})`, (err, recordset) => {
+                _this.disconnect();
+
+                if (err) return console.error(err);
+
+                return rs(true);
+            });
+        });
+    }
+
     getOrg(vlan: Number) {
         switch (vlan) {
             case 10:
@@ -295,6 +394,32 @@ module.exports = class mssql {
                 console.log("stdout: " + stdout);
                 console.log("stderr: " + stderr);
             })
+    }
+
+    login(username: string, password: string) {
+        let _this = this;
+        return new Promise(async (rs, rj) => {
+            // query to the database and get the records
+            try {
+                await _this.connect();
+                if (_this._pool == null) return;
+                _this.request = new sql.Request(_this._pool);
+                _this.request.query(`select *, (1000003) as org from VAD20.dbo.MA_CODIGOS_IDEMPIERE WHERE c_codnasa = '${username}' AND c_codigo = '${password}'`, (err, result) => {
+                    _this.disconnect();
+                    if (err) return console.log(err);
+                    // send records as a response
+                    if (result.recordset.length <= 0) return rs(false);
+
+                    console.info("as");
+
+                    return rs(result.recordset);
+                });
+            } finally {
+                // CLOSE POOL
+                console.dir('Datos retornados.')
+                //_this.pool.close();
+            }
+        });
     }
 
 }

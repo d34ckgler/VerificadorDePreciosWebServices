@@ -51,7 +51,7 @@ function ScanBar(sku) {
     codigo = '';
     if (flag) return;
 
-    fetch(`/jsonp/${sku}/10.10.10.1`, {
+    fetch(`/jsonp/${sku}/10.20.10.1`, {
             mode: 'cors',
             cache: 'no-cache',
             credentials: 'same-origin',
