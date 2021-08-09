@@ -24,7 +24,6 @@ function getOrg(org) {
             break;
         case "Tienda 04 Cabudare":
             return '10.40.10.1';
-<<<<<<< HEAD
         break;
         case "Tienda E01 La Granja":
             return '10.1.10.1';
@@ -45,38 +44,12 @@ module.exports = function(app) {
     app.get('/getProduct/:code/:org', (req,res) => {
         //return res.status(200).send({status: 404, message: "Disabled"});
         console.info("Movil");
-=======
-            break;
-        case "Tienda E01 La Granja":
-            return '10.1.10.1';
-            break;
-        case "Tienda E02 El Bosque":
-            return '10.2.10.1';
-            break;
-    }
-}
-
-module.exports = function (app) {
-    app.use(function (req, res, next) {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
-        next();
-    });
-
-    app.get('/getProduct/:code/:org', (req, res) => {
-        //return res.status(200).send({status: 404, message: "Disabled"});
-
->>>>>>> 0471216e4cba65747ca313b339d4e72c9ed20e43
         let sql = require('./secure/con-server');
         sql = new sql(req.params.org);
         sql.connect().then(r => {
             console.log('Conexion establecida con servidor de base de datos mediante GET.');
             console.info(`IP Consultor: ${req.params.org}`);
-<<<<<<< HEAD
             sql.getItemiDempiere(req.params.code).then( r => { 
-=======
-            sql.getItemiDempiere(req.params.code).then(r => {
->>>>>>> 0471216e4cba65747ca313b339d4e72c9ed20e43
                 console.log('Producto Obtenido...');
                 res.send(r.recordset);
                 sql.disconnect();
@@ -205,7 +178,6 @@ module.exports = function (app) {
         sql.connect().then(r => {
             console.log('Conexion establecida con servidor de base de datos mediante GET.');
             console.info(`IP Consultor: ${req.params.org}`);
-<<<<<<< HEAD
             sql.getItemInfo2(req.params.code).then( r => {
                 if(r.recordset == undefined) return res.status(404).send({statusCode: 404});
                 if(r.recordset.length > 0)
@@ -214,22 +186,12 @@ module.exports = function (app) {
                         Object.assign(r.recordset[0], { tasaf: format(r.recordset[0].tasa, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',')});
                     }
                 
-=======
-            sql.getItemInfo3(req.params.code).then(r => {
-                if (r.recordset == undefined) return res.status(404).send({ statusCode: 404 });
-                if (r.recordset.length > 0) {
-                    Object.assign(r.recordset[0], { format: format(r.recordset[0].precio, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',') });
-                    Object.assign(r.recordset[0], { tasaf: format(r.recordset[0].tasa, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',') });
-                }
-
->>>>>>> 0471216e4cba65747ca313b339d4e72c9ed20e43
                 res.send(r.recordset);
                 sql.disconnect();
             });
         });
     });
 
-<<<<<<< HEAD
     app.get('/bcv/:code/:org', (req,res) => {
         let sql = require('./secure/con-server');
         sql = new sql(req.params.org);
@@ -252,10 +214,6 @@ module.exports = function (app) {
 
     app.get('/printProductZpl/:args', (req,res) => {
         if(Object.keys(req.params).length <= 0) return;
-=======
-    app.get('/printProductZpl/:args', (req, res) => {
-        if (Object.keys(req.params).length <= 0) return;
->>>>>>> 0471216e4cba65747ca313b339d4e72c9ed20e43
 
         //return res.send([{STATUS: "ERROR", msg: "Impresión de Habladores Deshabilitada"}]);
 
@@ -274,20 +232,12 @@ module.exports = function (app) {
     });
 
     app.get('/api/v2/sendItem/:org/:codigo', (req, res, next) => {
-<<<<<<< HEAD
         if(req.params.org == null || req.params.codigo == null) {
-=======
-        if (req.params.org == null || req.params.codigo == null) {
->>>>>>> 0471216e4cba65747ca313b339d4e72c9ed20e43
             res.status(200).send('Parametros incorrectos.');
             return next();
         }
 
-<<<<<<< HEAD
         if(req.params.org === 'Seleccione una tienda') {
-=======
-        if (req.params.org === 'Seleccione una tienda') {
->>>>>>> 0471216e4cba65747ca313b339d4e72c9ed20e43
             console.info(req.params.org);
             return res.status(502).send("Debe seleccionar una organizacion valida!");
         }
@@ -300,11 +250,7 @@ module.exports = function (app) {
         sql.sendItem(req.params.codigo).then((response) => {
             res.status(200).send(response);
             //return next();
-<<<<<<< HEAD
         }).catch( (e) => {
-=======
-        }).catch((e) => {
->>>>>>> 0471216e4cba65747ca313b339d4e72c9ed20e43
             res.status(502).send(e);
             //return next();
             console.error(e);
