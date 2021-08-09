@@ -6,13 +6,21 @@ const http:any = require('http');
 //const https:any = require('https');
 const socketIO = require('socket.io');
 const fs:any = require('fs');
+const zlib = require('compression');
+const bodyParser = require('body-parser');
+const compression = new zlib();
+// var corsOptions = {
+//     "origin": "*",
+//     "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+//     "preflightContinue": false,
+//     "optionsSuccessStatus": 204
+//   }
 
-var corsOptions = {
-    "origin": "*",
-    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-    "preflightContinue": false,
-    "optionsSuccessStatus": 204
-  }
+// Cors Options
+let corsOptions = {
+    origin: true,
+    credentials: true
+  };
 
 // Administrando Certificado
 var privateKey = fs.readFileSync('./src/ssl/srvopappnginx.key');
@@ -28,7 +36,7 @@ server.timeout = 0;
 const io = socketIO(server);
 
 // Asignando puerto
-app.set('port', process.env.port || 3000);
+app.set('port', process.env.port || 3001);
 
 // sockets
 const sockets = require('./socket');
@@ -41,6 +49,10 @@ require('./routes')(app);
 // Ruta Absoluta
 //app.use(helmet());
 app.use(cors(corsOptions));
+app.use(compression);
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({limit: '50mb', extended: true}));
+app.use(express.json({ limit: '50mb', extended: true }));
 app.use(express.static(path.join(__dirname, 'public_html'), {
     extensions: ['html', 'php']
 }));

@@ -18,32 +18,26 @@
             font-family: 'Bree';
             src: url('assets/css/font/BreeRegular.otf');
         }
-        
+
         * {
             font-family: "Bree";
             font-weight: normal;
         }
-        
+
         body {
             background-color: white !important;
             background: url(assets/images/bio.jpg);
             background-size: 100% 100%;
             background-repeat: no-repeat;
         }
-        
-        body,
-        html {
-            height: 100%;
-            margin: 0;
-        }
-        
+
         input[type="text"] {
             color: black !important;
             font-size: 14pt !important;
             font-weight: bold !important;
         }
+
         /*#szCode,*/
-        
         #szDesc,
         #prcbs,
         #prcusd,
@@ -56,11 +50,11 @@
             border: none;
             text-align: center;
         }
-        
+
         * {
             overflow: hidden;
         }
-        
+
         label {
             font-weight: bold !important;
             font-size: 14pt;
@@ -70,31 +64,29 @@
 
 <body>
     <!-- PUBLICIDAD -->
-    <div id="publishing" style="position: relative; height: 100%; filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(
-        src='assets/images/bio-mercado-santa-cecilia_gl.jpg',
-        sizingMethod='scale'); z-index: 999;
-        -ms-filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(
-        src='assets/images/bio-mercado-santa-cecilia_gl.jpg',
-        sizingMethod='scale'); z-index: 999;">
-    </div>
+        <div id="publishing" style="width: 100%; height: 100%; background-image: url(assets/images/bio-mercado-santa-cecilia_gl.jpg); background-size: cover; z-index: 999;">
+        </div>
 
-    <div class="form-group">
-        <input value="" style="font-size: 42pt !important; color: orangered !important; position: absolute; left: 0%; top: 15%; width: 100% !important;" id="szDesc" type="text" readonly class="form-control">
-    </div>
+        <div class="form-group">
+            <input value="" style="font-size: 42pt !important; color: orangered !important; position: absolute; left: 0%; top: 15%; width: 100% !important;" id="szDesc" type="text" readonly class="form-control">
+        </div>
 
-    <div class="form-group">
-        <input value="" id="prcbs" class="form-control" style="font-size: 36pt !important; color: red !important; position: absolute; left: 0%; top: 35%; width: 100% !important;" readonly type="text" value="">
-    </div>
+        <div class="form-group">
+            <input value="" id="prcbs" class="form-control" style="font-size: 36pt !important; color: red !important; position: absolute; left: 0%; top: 35%; width: 100% !important;" readonly
+                                        type="text" value="">
+        </div>
 
-    <div class="form-group">
-        <input value="" id="prcusd" class="form-control" style="font-size: 36pt !important; color: red !important; position: absolute; left: 0%; top: 55%; width: 100% !important;" readonly type="text" value="">
-    </div>
-
-    <div class="form-group">
-        <input value="" id="ntasa" class="form-control" style="font-size: 36pt !important; color: red !important; position: absolute; left: 0%; top: 75%; width: 100% !important;" readonly type="text" value="">
-    </div>
-
-
+        <div class="form-group">
+            <input value="" id="prcusd" class="form-control" style="font-size: 36pt !important; color: red !important; position: absolute; left: 0%; top: 55%; width: 100% !important;" readonly
+                                        type="text" value="">
+        </div>
+        
+        <div class="form-group">
+            <input value="" id="ntasa" class="form-control" style="font-size: 36pt !important; color: red !important; position: absolute; left: 0%; top: 75%; width: 100% !important;" readonly
+                                        type="text" value="">
+        </div>
+            
+        
     </section>
 
     <script type="text/javascript">
@@ -106,12 +98,12 @@
         var publishing = document.getElementById("publishing");
         var isprice = document.getElementById("isprice");
 
-        setTimeout(function() {
+        setTimeout(function () {
             document.location.reload();
         }, 200000)
 
         var codigo = "";
-        $(document).on('keypress', function(e) {
+        $(document).on('keypress', function (e) {
             if (e.key >= 0 && e.key < 9) {
                 //codigo = codigo + e.key;
             }
@@ -120,31 +112,30 @@
                 $(publishing).fadeOut('fast');
                 //szCode.value = codigo;
                 //Toggle fullscreen off, activate it
-                if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {
                     if (document.documentElement.requestFullscreen) {
                         document.documentElement.requestFullscreen();
                     } else if (document.documentElement.mozRequestFullScreen) {
-                        document.documentElement.mozRequestFullScreen(); // Firefox
+                    document.documentElement.mozRequestFullScreen(); // Firefox
                     } else if (document.documentElement.webkitRequestFullscreen) {
                         document.documentElement.webkitRequestFullscreen(); // Chrome and Safari
                     } else if (document.documentElement.msRequestFullscreen) {
                         document.documentElement.msRequestFullscreen(); // IE
                     }
-
-                    //Toggle fullscreen on, exit fullscreen
-                }
-                /* else {
-                       
-                                   if (document.exitFullscreen) {
-                                       document.exitFullscreen();
-                                   } else if (document.msExitFullscreen) {
-                                       document.msExitFullscreen();
-                                   } else if (document.mozCancelFullScreen) {
-                                       document.mozCancelFullScreen();
-                                   } else if (document.webkitExitFullscreen) {
-                                       document.webkitExitFullscreen();
-                                   }
-                               }*/
+        
+                //Toggle fullscreen on, exit fullscreen
+                } /* else {
+        
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    }
+                }*/
                 /*if (szCode.value == "exit") {
                     window.close();
                 }*/
@@ -165,32 +156,31 @@
         });
 
         var flag = false;
-
         function ScanBar(sku) {
             codigo = '';
             if (flag) return;
-
+            
             $.ajax({
                 url: "http://10.10.100.104/jsonp/" + sku + "/10.10.10.10",
                 context: document.body,
                 statusCode: {
-                    404: function() {
+                    404: function () {
                         szDesc.value = "Producto no encontrado";
-                        setTimeout(function() {
+                        setTimeout(function () {
                             $(isprice).fadeOut('fast');
                             $(publishing).fadeIn('fast');
                             szDesc.value = "";
                         }, 2000)
                     }
                 },
-                success: function(data, i) {
+                success: function (data, i) {
                     flag = true;
                     szDesc.value = data[0].C_DESCRI;
                     prcbs.value = data[0].format;
                     ntasa.value = data[0]['tasaf'];
                     prcusd.value = data[0].prcusd;
                     //szCode.value = "";
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $(publishing).show('fast');
                         codigo = "";
                         szDesc.value = "";
@@ -200,7 +190,7 @@
                         flag = false
                     }, 3000);
                 }
-            }).done(function(data) {
+            }).done(function (data) {
                 //if (data == undefined || data == null) return szDesc.value = "Producto no existe en Inventario";
                 /*flag = true;
                 szDesc.value = data[0].C_DESCRI
