@@ -261,12 +261,14 @@ module.exports = class mssql {
             await _this.connect();
             if (_this._pool == null) return;
             _this.request = new sql.Request(_this._pool);
-            _this.request.query(`select P.C_Caja, P.C_Numero, P.C_CONCEPTO, P.F_Fecha, P.C_RIF, P.C_DESC_CLIENTE, MC.c_TELEFONO, P.cu_direccion_cliente from VAD20.dbo.MA_PAGOS P
+            _this.request.query(`select P.C_Caja, P.C_Numero, P.C_CONCEPTO, P.F_Fecha, P.C_RIF, P.C_DESC_CLIENTE, MC.c_TELEFONO, P.cu_direccion_cliente,
+                                (case when BR.id is null then 'N' else 'Y' end) as isProcess
+            from VAD20.dbo.MA_PAGOS P
             left join VAD20.dbo.BioRuta BR on P.C_Numero = BR.C_Numero
             LEFT join VAD10.dbo.MA_CLIENTES MC on mc.c_RIF = P.C_RIF
             where P.C_Numero = '${cInvoice}'
-            and P.C_CONCEPTO = 'VEN'
-            and BR.id is null`, (err, recordset) => {
+            --and P.C_CONCEPTO = 'VEN'
+            --and BR.id is null`, (err, recordset) => {
                 _this.disconnect();
 
                 if (err) return console.error(err);
