@@ -22,7 +22,7 @@ module.exports = class mssql {
         let vlan = addr.split('.').slice(1, 2);
         this.addr = parseInt(vlan[0]);
 
-        this.config.server = (_this.addr == 60) ? `10.${_this.getVPN(_this.addr)}.100.19` : `10.${_this.getVPN(_this.addr)}.100.104`;
+        this.config.server = (_this.addr == 60) ? `10.${_this.getVPN(_this.addr)}.100.19` : `10.${_this.getVPN(_this.addr)}.100.18`;
     }
 
     getVPN(t: number) {
