@@ -274,7 +274,7 @@ module.exports = class mssql {
 
                 if (err) return console.error(err);
                 // send records as a response
-                if (recordset.recordset.length <= 0) return rs(false);
+                if (recordset.recordset.length <= 0) return rs({recordset: []});
 
                 return rs(recordset);
             });
