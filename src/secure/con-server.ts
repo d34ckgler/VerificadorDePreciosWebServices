@@ -262,11 +262,11 @@ module.exports = class mssql {
             if (_this._pool == null) return;
             _this.request = new sql.Request(_this._pool);
             _this.request.query(`select ssl.biozonas_id as bz_id, ssl.biosubzonas_id as bsz_id, P.C_Caja, P.C_Numero, P.C_CONCEPTO, P.F_Fecha, P.C_RIF, P.C_DESC_CLIENTE, BR.N_Telefono, P.cu_direccion_cliente, BR.biozonas_id, BR.biosubzonas_id,
-            (case when BR.id is null then 'N' else 'Y' end) as isProcess
+                                (case when BR.id is null then 'N' else 'Y' end) as isProcess
             from VAD20.dbo.MA_PAGOS P
             left join VAD20.dbo.BioRuta BR on P.C_Numero = BR.C_Numero
             LEFT join VAD10.dbo.MA_CLIENTES MC on mc.c_RIF = P.C_RIF
-            left join (select max(id) as id, max(biozonas_id) as biozonas_id, max(biosubzonas_id) as biosubzonas_id, max(created_at) as created, max(C_RIF) as C_RIF from BioRuta) ssl on ssl.C_RIF = P.C_RIF
+            left join (select max(id) as id, max(biozonas_id) as biozonas_id, max(biosubzonas_id) as biosubzonas_id, max(created_at) as created, C_RIF as C_RIF from BioRuta Group By C_RIF) ssl on ssl.C_RIF = P.C_RIF
             where P.C_Numero = '${cInvoice}'
             --and P.C_CONCEPTO = 'VEN'
             --and BR.id is null`, (err, recordset) => {
