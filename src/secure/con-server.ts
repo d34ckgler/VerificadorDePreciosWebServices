@@ -266,10 +266,8 @@ module.exports = class mssql {
             from VAD20.dbo.MA_PAGOS P
             left join VAD20.dbo.BioRuta BR on P.C_Numero = BR.C_Numero
             LEFT join VAD10.dbo.MA_CLIENTES MC on mc.c_RIF = P.C_RIF
-            left join (select max(id) as id, max(biozonas_id) as biozonas_id, max(biosubzonas_id) as biosubzonas_id, max(created_at) as created, C_RIF as C_RIF from BioRuta Group By C_RIF) ssl on ssl.C_RIF = P.C_RIF
-            where P.C_Numero = '${cInvoice}'
-            --and P.C_CONCEPTO = 'VEN'
-            --and BR.id is null`, (err, recordset) => {
+            left join (select top 1 max(id) as id, biozonas_id as biozonas_id, biosubzonas_id as biosubzonas_id, max(created_at) as created, C_RIF as C_RIF from BioRuta Group By C_RIF, biosubzonas_id, biozonas_id) ssl on ssl.C_RIF = P.C_RIF
+            where P.C_Numero = '${cInvoice}'`, (err, recordset) => {
                 _this.disconnect();
 
                 if (err) return console.error(err);
