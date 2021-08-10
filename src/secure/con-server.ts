@@ -261,7 +261,7 @@ module.exports = class mssql {
             await _this.connect();
             if (_this._pool == null) return;
             _this.request = new sql.Request(_this._pool);
-            _this.request.query(`select ssl.biozonas_id as bz_id, ssl.biosubzonas_id as bsz_id, P.C_Caja, P.C_Numero, P.C_CONCEPTO, P.F_Fecha, P.C_RIF, P.C_DESC_CLIENTE, ssl.N_Telefono, ssl.C_Direccion, BR.biozonas_id, BR.biosubzonas_id,
+            _this.request.query(`select ssl.biozonas_id as bz_id, ssl.biosubzonas_id as bsz_id, P.C_Caja, P.C_Numero, P.C_CONCEPTO, P.F_Fecha, P.C_RIF, P.C_DESC_CLIENTE, ssl.N_Telefono, ssl.C_Direccion as cu_direccion_cliente, BR.biozonas_id, BR.biosubzonas_id,
                                 (case when BR.id is null then 'N' else 'Y' end) as isProcess
             from VAD20.dbo.MA_PAGOS P
             left join VAD20.dbo.BioRuta BR on P.C_Numero = BR.C_Numero
