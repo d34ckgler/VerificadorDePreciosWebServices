@@ -36,7 +36,7 @@ server.timeout = 0;
 const io = socketIO(server);
 
 // Asignando puerto
-app.set('port', process.env.port || 3001);
+app.set('port', process.env.port || 3000);
 
 // sockets
 const sockets = require('./socket');

@@ -111,7 +111,7 @@ module.exports = function(app) {
     });
 
     // Setear Factura
-    app.get('/api/v1/setInvoice/:C_RIF/:C_Numero/:C_Direccion/:N_Telefono/:zones_id/:subzones_id/:org', (req, res) => {
+    app.get('/api/v1/setInvoice/:C_RIF/:C_Numero/:C_Direccion/:N_Telefono/:C_Email/:zones_id/:subzones_id/:org', (req, res) => {
         console.log(req.params);
         res.status(200).json({status: "OK"});
         if (req.params.org) {
@@ -119,7 +119,6 @@ module.exports = function(app) {
             sql = new sql(req.params.org);
             sql.connect().then(r => {
                 sql.setInvoice(req.params).then(r => {
-                    console.log('Listando Zonas...');
                     res.status(200).send(r.recordset);
                     sql.disconnect();
                 });
