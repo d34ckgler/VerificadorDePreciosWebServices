@@ -1,6 +1,7 @@
 'use strict'
 
 let socket = io();
+var reconversion = 1000000;
 
 socket.emit('connect');
 
@@ -28,7 +29,7 @@ $(document).ready(() => {
     let btnClose = $('.close');
     let btxReconnect = $('#btxReconnect');
     let print = new Audio('assets/sound/print.wav');
-    let isSsl = (document.location.protocol == 'http:') ? false : true;
+    let isSsl = (document.location.protocol == 'http:') ? true : true;
     let szOrg = document.querySelector('#szOrg');
     if (isSsl) {
         $('#jszOrg').show();
@@ -178,7 +179,7 @@ $(document).ready(() => {
                 // Checando Impresion
                 btnPrint.removeAttr('disabled');
                 if (PrintHab.getAttribute('checked') === 'true') {
-                    socket.emit('printlabel', { szcode: response.c_codigo, sku: response.c_codnasa, desc: response.C_DESCRI, price: _this.formatMoney(response.price) + "", iva: '0,00', pv: _this.formatMoney(response.precio) + "" });
+                    socket.emit('printlabel', { szcode: response.c_codigo, sku: response.c_codnasa, desc: response.C_DESCRI, price: _this.formatMoney(response.price) + "", iva: '0,00', pv: _this.formatMoney(response.precio) + "", ved: [_this.formatMoney(response.price/reconversion) + "", _this.formatMoney(response.precio/reconversion) + "", "0,00"] });
                     fvszCode.show('slow');
                     fvszCode.html('Correcto, Hablador impreso correctamente.');
                     szCode.addClass('is-valid');
@@ -273,7 +274,7 @@ $(document).ready(() => {
 
     btnPrint.click(e => {
         // Checando Impresion
-        socket.emit('printlabel', { szcode: response.c_codigo, sku: response.c_codnasa, desc: response.C_DESCRI, price: CC.formatMoney(response.price) + "", iva: CC.formatMoney(parseFloat(response.price * response.n_impuesto1 / 100)), pv: CC.formatMoney(response.precio) + "" });
+        socket.emit('printlabel', { szcode: response.c_codigo, sku: response.c_codnasa, desc: response.C_DESCRI, price: CC.formatMoney(response.price) + "", iva: CC.formatMoney(parseFloat(response.price * response.n_impuesto1 / 100)), pv: CC.formatMoney(response.precio) + "", ved: [CC.formatMoney(response.price/reconversion) + "", CC.formatMoney(response.precio/reconversion) + "", CC.formatMoney(parseFloat((response.price/reconversion) * response.n_impuesto1 / 100))] });
         setTimeout(() => {
             fvszCode.html('Correcto, Hablador impreso correctamente.');
             fvszCode.show('slow');

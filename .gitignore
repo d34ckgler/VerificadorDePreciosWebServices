@@ -1,4 +1,12 @@
+# download and apps links
 src/public_html/app
+
+# modules & dependencies
 node_modules
+
+# development
 JS_DEVELOPMENT
+
+# external files & backup's
+*.zip
 *.rar

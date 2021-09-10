@@ -9,6 +9,10 @@
     transition: 300ms ease-in-out all;
 }
 
+html, body {
+    overflow: hidden;
+}
+
 .App-header {
     /* background-color: #282c34; */
     min-height: 100vh;
@@ -16,7 +20,8 @@
     /* flex-direction: column; */
     flex-direction: column;
     justify-content: space-around;
-    padding-top: 3%;
+    padding-top: 1%; /* padding-top: 3%; */
+    overflow: hidden;
     /* flex-direction: row; */
     align-items: left;
     justify-content: space-between;
@@ -51,7 +56,8 @@
 }
 
 label {
-    font-size: calc(4px + 6vmin);
+    font-size: calc(4px + 5vmin);
+    font-weight: bold;
     color: #000
 }
 

@@ -1,0 +1,146 @@
+@font-face {
+    font-family: 'Bree';
+    src: url('../css/font/BreeRegular.otf');
+}
+
+* {
+    font-family: "Bree";
+    font-weight: normal;
+    transition: 300ms ease-in-out all;
+}
+
+html, body {
+    overflow: hidden;
+}
+
+.App-header {
+    /* background-color: #282c34; */
+    min-height: 100vh;
+    display: flex;
+    /* flex-direction: column; */
+    flex-direction: column;
+    justify-content: space-around;
+    padding-top: 1%; /* padding-top: 3%; */
+    overflow: hidden;
+    /* flex-direction: row; */
+    align-items: left;
+    justify-content: space-between;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    overflow-x: hidden;
+    z-index: 30;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    /* padding-left: 15%;
+    padding-right: 15%; */
+}
+
+.footer {
+    position: fixed;
+    align-self: flex-end;
+    /* align-self: flex-end; */
+    /* align-self: flex-end; */
+    left: 0;
+    bottom: 0;
+    background-image: url(../images/Verificadores-de-Precios_Fondo.jpg) !important;
+    width: 100vmax;
+    height: 50vmin;
+    background-size: cover;
+    background-position: 0vmin 0vmin;
+    background-repeat: no-repeat;
+}
+
+label {
+    font-size: calc(4px + 5vmin);
+    font-weight: bold;
+    color: #000
+}
+
+.holders {
+    color: orangered !important;
+    font-size: 3.5vmin;
+    text-align: center;
+    border-bottom-right-radius: 100vmin !important;
+    width: 70% !important;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.form-control:focus {
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+
+/* body {
+    position: fixed;
+    width: 100vmax;
+    height: 100vh;
+    background-image: url(../images/Verificadores-de-Precios_Fondo.jpg);
+    background-size: 100vmax 100vmin;
+    z-index: 10;
+} */
+
+#verificador {
+    /* display: none; */
+    position: fixed;
+    width: 100vmax;
+    height: 100vh;
+    background-image: url(../images/Verificadores-de-Precios_Fondo.jpg);
+    background-size: 100vmax 100%;
+    background-repeat: no-repeat !important;
+    z-index: -1;
+}
+
+#publishing {
+    /* display: none; */
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-image: url(../images/Verificadores-de-Precios_Consulte-su-precio.jpg);
+    background-size: 100% 100%;
+    z-index: 20;
+}
+
+@media only screen and (max-width: 650px) and (min-width: 5px) {
+    #publishing {
+        /* display: none; */
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-image: url(../images/Verificadores-de-Precios_Consulte-su-precio.jpg);
+        background-size: 100% 100%;
+        background-repeat: no-repeat !important;
+        z-index: 20;
+    }
+    #verificador {
+        /* display: none; */
+        position: fixed;
+        width: 100vmax;
+        height: 100vh;
+        background-image: url(../images/Verificadores-de-Precios_Fondo.jpg);
+        background-size: 100vmax 100%;
+        background-repeat: no-repeat !important;
+        z-index: -1;
+    }
+}
+
+.tasa {
+    color: green !important
+}
+
+.awesome {
+    color: #000;
+}
+
+.App-header label {
+    color: #fff;
+    align-self: baseline !important;
+    margin-left: 15%;
+    /* align-content: space-around; */
+}

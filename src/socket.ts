@@ -1,4 +1,5 @@
 import { disconnect } from "cluster";
+import { mssql } from './secure/con-server';
 
 // const MobileDetect = require('mobile-detect');
 const clr = require('colors');
@@ -25,8 +26,8 @@ module.exports = class io {
 
                 _this.addr = dt.addr;
                 // CREANDO CONEXION
-                let sql = require('./secure/con-server');
-                sql = new sql(dt.addr);
+                // let sql = require('./secure/con-server');
+                let sql = new mssql(dt.addr);
                 sql.connect().then(res => {
                     console.log('Conexion establecida con servidor de base de datos.');
                     sql.getItemInfo(dt.code).then(res => {
@@ -55,7 +56,7 @@ module.exports = class io {
                 sql = new sql(_this.addr);
                 let vlan = _this.addr.split('.').slice(1, 2);
                 console.log("Probando impresora");
-                sql.printlabel('"' + sql.getOrg(parseInt(vlan[0]))[0] + '"', sql.getOrg(parseInt(vlan[0]))[1], '"' + data.szcode + '"', '"' + data.sku + '"', '"' + data.desc + '"', '"' + data.price + '"', '"' + data.iva + '"', '"' + data.pv + '"');
+                sql.printlabel('"' + sql.getOrg(parseInt(vlan[0]))[0] + '"', sql.getOrg(parseInt(vlan[0]))[1], '"' + data.szcode + '"', '"' + data.sku + '"', '"' + data.desc + '"', '"' + data.price + '"', '"' + data.iva + '"', '"' + data.pv + '"', data.ved);
             })
 
             socket.on('disconnect', function (data) {

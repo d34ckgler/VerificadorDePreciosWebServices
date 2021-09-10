@@ -1,4 +1,4 @@
-module.exports = class cups {
+export class cups {
     private exec = require('child_process').exec;
     private child = null;
     private printer: String;
@@ -64,7 +64,7 @@ module.exports = class cups {
                                                                         + Parameters.currency, (error, stdout, stderr) => {
                 console.log("stdout: " + stdout);
                 console.log("stderr: " + stderr);
-                if(stderr.indexOf('Error: Unable to access jarfile ../src/plugin/PrintHablClass.jar') >= 0)
+                if(stderr.indexOf('Error: Unable to access jarfile ../src/plugin/PrintHablClass.jar ') >= 0)
                     return resolve([{STATUS: "ERROR", msg: "Libreria no encontrada"}]);
                 else if(stderr.indexOf('GRAVE: null') >= 0) {
                     return resolve([{STATUS: "ERROR", msg: "Error, Verificar Cups de Impresiòn Reportar a Sistemas OP."}]);

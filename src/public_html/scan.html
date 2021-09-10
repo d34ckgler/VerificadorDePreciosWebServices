@@ -26,7 +26,7 @@
         
         body {
             background-color: white !important;
-            background: url(assets/images/bio.jpg);
+            background: url(assets/images/bio_.jpg);
             background-size: 100% 100%;
             background-repeat: no-repeat;
         }
@@ -71,8 +71,8 @@
         </div>
         <div id="isprice" style="padding-left: 50px; padding-right: 120px;">
             <input id="prcbs" class="form-control" style="position: absolute; left: 3%; top: 37%; width: 100% !important;" readonly type="text" value="">
-            <input style="position: absolute; left: 3%; top: 58%; color: rgb(123, 145, 123);" id="prcusd" class="form-control" style="width: 100% !important;" readonly type="text" value="">
-            <input style="width: 100%; position: absolute; left: -7%; top: 78%; color: green !important;" id="ntasa" class="form-control" style="width: 100% !important;" readonly type="text" value="">
+            <input style="position: absolute; left: 3%; top: 58%; color: rgb(123, 145, 123);" id="ntasa" class="form-control" style="width: 100% !important;" readonly type="text" value="">
+            <input style="width: 100%; position: absolute; left: -7%; top: 78%; color: green !important;" id="prcusd" class="form-control" style="width: 100% !important;" readonly type="text" value="">
         </div>
         </section>
 
@@ -91,9 +91,11 @@
 
             var codigo = "";
             $(document).on('keypress', function(e) {
-                if (e.key >= 0 && e.key < 9) {
-                    codigo = codigo + e.key;
-                }
+                // if (e.key >= 0 && e.key < 9) {
+                //     codigo = codigo + e.key;
+                // }
+                var letter = event.which || event.keyCode;
+                // codigo = codigo + String.fromCharCode(letter);
                 if (e.which == 13) {
                     $(isprice).fadeIn('fast');
                     $(publishing).fadeOut('fast');
@@ -148,7 +150,7 @@
                 if (flag) return;
 
                 $.ajax({
-                    url: "http://10.10.100.104/jsonp/" + sku + "/10.40.10.10",
+                    url: "/jsonp/" + sku + "/10.40.10.10",
                     context: document.body,
                     statusCode: {
                         404: function() {
@@ -164,8 +166,12 @@
                         flag = true;
                         szDesc.value = data[0].C_DESCRI;
                         prcbs.value = data[0].format;
-                        ntasa.value = data[0]['tasaf'];
-                        prcusd.value = data[0].prcusd;
+                        /**
+                         * ntasa deshabilitado por reconvercion temporal
+                         * */
+                        // ntasa.value = data[0]['tasaf'];
+                        ntasa.value = data[0].ved;
+                        prcusd.value = data[0].p_dolar;
                         //szCode.value = "";
                         setTimeout(function() {
                             $(publishing).show('fast');

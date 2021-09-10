@@ -1,5 +1,6 @@
 var szDesc = document.getElementById("szDescription");
 var prcbs = document.getElementById("prcbs");
+var nved = document.getElementById("nved");
 var prcusd = document.getElementById("prcusd");
 var ntasa = document.getElementById("ntasa");
 var publishing = document.getElementById("publishing");
@@ -69,32 +70,35 @@ function ScanBar(sku) {
                     $(isprice).fadeOut('fast');
                     $(publishing).fadeIn('fast');
                     szDesc.value = "";
-                }, 2000);
+                }, 5000);
             } else {
                 flag = true;
                 $('.awesome').hide('fast', () => {});
 
                 szDesc.value = data[0].C_DESCRI;
                 prcbs.value = data[0].format;
+                nved.value = data[0].ved;
                 ntasa.value = data[0]['tasaf'];
-                prcusd.value = data[0].prcusd;
+                prcusd.value = data[0].p_dolar;
 
                 setTimeout(function() {
                     $(publishing).fadeIn('fast');
                     codigo = "";
                     szDesc.value = "";
                     prcbs.value = '';
+                    nved.value = '';
                     ntasa.value = '';
                     prcusd.value = '';
                     $('.awesome').fadeIn('fast');
                     flag = false
-                }, 3000);
+                }, 6000);
             }
         }).catch(err => {
             $(publishing).fadeIn('fast');
             codigo = "";
             szDesc.value = "";
             prcbs.value = '';
+            nved.value = '';
             ntasa.value = '';
             prcusd.value = '';
             $('.awesome').fadeOut('fast');

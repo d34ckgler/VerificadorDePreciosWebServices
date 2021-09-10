@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificador de Precio</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/App-alternative.css">
+</head>
+
+<body>
+    <div id="publishing"></div>
+    <div id="verificador"></div>
+    <div class="App-header">
+        <div class="content">
+            <label for="description">Descripci&oacute;n</label>
+            <i class="fas fa-spinner awesome"></i>
+            <input readonly id="szDescription" value="" type="text" class="form-control holders">
+            <!-- Bolivares -->
+            <label for="description">Precio en Bs.</label>
+            <i class="fas fa-spinner awesome"></i>
+            <input readonly id="prcbs" value="" type="text" class="form-control holders">
+            <!-- Bolivar Digital -->
+            <label for="nved">Precio en Bs.</label>
+            <i class="fas fa-spinner awesome"></i>
+            <input readonly id="nved" value="" type="text" class="form-control holders tasa">
+            <!-- Dolares -->
+            <label style="color: red;" for="description">Precio en USD.</label>
+            <i class="fas fa-spinner awesome"></i>
+            <input readonly id="prcusd" value="" type="text" class="form-control holders">
+            <!-- Tasa -->
+            <label for="description">Tasa del Dia</label>
+            <i class="fas fa-spinner awesome"></i>
+            <input readonly id="ntasa" value="" type="text" class="form-control holders tasa">
+        </div>
+        <!-- <div class="footer"></div> -->
+    </div>
+    <script type="text/javascript" src="assets/js/jquery-1.8.3.js"></script>
+    <script defer src="https://pro.fontawesome.com/releases/v5.10.0/js/all.js" integrity="sha384-G/ZR3ntz68JZrH4pfPJyRbjW+c0+ojii5f+GYiYwldYU69A+Ejat6yIfLSxljXxD" crossorigin="anonymous"></script>
+    <script src="assets/js/verificadore01.js"></script>
+</body>
+
+</html>
