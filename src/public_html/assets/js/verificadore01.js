@@ -76,10 +76,10 @@ function ScanBar(sku) {
                 $('.awesome').hide('fast', () => {});
 
                 szDesc.value = data[0].C_DESCRI;
-                prcbs.value = data[0].format;
-                nved.value = data[0].ved;
+                prcbs.value = 'Bs ' + data[0].format;
+                nved.value = 'Bs ' + data[0].ved;
                 ntasa.value = data[0]['tasaf'];
-                prcusd.value = data[0].p_dolar;
+                prcusd.value = 'USD ' + data[0].p_dolar;
 
                 setTimeout(function() {
                     $(publishing).fadeIn('fast');

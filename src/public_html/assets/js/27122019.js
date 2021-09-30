@@ -3,7 +3,7 @@
 let socket = io();
 var reconversion = 1000000;
 
-socket.emit('connect');
+socket.emit('connection');
 
 socket.on('ping', d => {
     console.log(d);

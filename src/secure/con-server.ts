@@ -477,12 +477,12 @@ export class mssql {
                 ,mt.COD_PRINCIPAL as codnasa
                 ,mp2.C_DESCRI as description
                 ,mt.Precio as price
-                ,mt.Cantidad as qty
+                --,mt.Cantidad as qty
                 ,mt.Subtotal as total
                 ,coalesce(cis.Estado, 'False') as Estado
                 ,coalesce(cis.Duplicado, 'False') as Duplicado
                 ,DATEDIFF(SECOND,convert(date, mp.F_Fecha, 105), convert(date, GETDATE(), 105)) as dateDoc,
-				sum(mt.Cantidad) as qtysum
+				sum(mt.Cantidad) as qty
                 from MA_PAGOS mp 
                 inner join MA_TRANSACCION mt on mt.C_Numero = mp.C_Numero
                 left join c_invoicescanned cis on cis.C_Numero = mp.C_Numero

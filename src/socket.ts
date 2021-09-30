@@ -14,7 +14,7 @@ module.exports = class io {
         _this.addr = null;
         var clients = {}
 
-        _this.io.on('connect', socket => {
+        _this.io.on('connection', socket => {
             clients[socket.id] = socket;
 
             _this.ping(socket);

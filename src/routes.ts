@@ -3,6 +3,7 @@ import { format, getOrg } from './functions';
 import { cups } from './lib/cups';
 import { invoiceRoutes } from './routers/bioinvoices';
 import { bioRutas } from './routers/biorutas';
+import { localStoreRoute } from './routers/localStore';
 // Conexion a Base de Datos SQL Server
 import { mssql } from './secure/con-server';
 
@@ -23,6 +24,11 @@ module.exports = function (app: Router) {
      */
         invoiceRoutes(app);
     // ===================
+    /**
+    * local Store - Inspired in bio Gourmet
+    */
+        localStoreRoute(app);
+    // ===================
 
     app.get('/getProduct/:code/:org', (req, res) => {
         //return res.status(200).send({status: 404, message: "Disabled"});
@@ -31,7 +37,7 @@ module.exports = function (app: Router) {
         sql.connect().then((r: any) => {
             console.log('Conexion establecida con servidor de base de datos mediante GET.');
             console.info(`IP Consultor: ${req.params.org}`);
-            sql.getItemiDempiere(req.params.code).then( (r: any) => {
+            sql.getItemiDempiere(req.params.code).then((r: any) => {
                 console.log('Producto Obtenido...');
                 res.send(r.recordset);
                 sql.disconnect();
@@ -73,7 +79,7 @@ module.exports = function (app: Router) {
                     Object.assign(r.recordset[0], { p_dolar: format(r.recordset[0].prcusd, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',') });
                     Object.assign(r.recordset[0], { format: format(r.recordset[0].precio, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',') });
                     Object.assign(r.recordset[0], { tasaf: format(r.recordset[0].tasa, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',') });
-                    Object.assign(r.recordset[0], { ved: format(r.recordset[0].precio / 1000000, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',') });
+                    Object.assign(r.recordset[0], { ved: format(r.recordset[0].precio * 1000000, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',') });
                 }
 
                 res.send(r.recordset);
