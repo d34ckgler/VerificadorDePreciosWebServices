@@ -458,12 +458,12 @@ export class mssql {
 
     getBioInvoice(invoiceNo: string) {
         let self = this;
-        return new Promise( async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (!invoiceNo || invoiceNo.length < 8) {
                 return [{ status: 'DC_INVALID', message: 'Numero de factura incorrecto.' }];
             } else {
                 await self.connect();
-                if(self._pool === null) return;
+                if (self._pool === null) return;
                 self.request = new sql.Request(self._pool);
                 self.request.query(`select row_number() over(order by (select 0)) as id, PO.documentno, PO.rif, PO.client, PO.totaldoc, PO.f_fecha, PO.f_hora, PO.codnasa, PO.description, PO.price, sum(PO.qty) as qty, sum(PO.total) as total, PO.Estado, PO.Duplicado, PO.dateDoc, PO.totaldoc/sum(bcc.n_factor) as totaldocusd
 				from (select TOP 5
@@ -499,7 +499,7 @@ export class mssql {
 				having sum(PO.qty) > 0
 				order by PO.price DESC
                 `, (err, recordset) => {
-                    if(err) return resolve([]);
+                    if (err) return resolve([]);
 
                     return resolve(recordset?.recordset);
                 });
@@ -509,12 +509,12 @@ export class mssql {
 
     setBioInvoice(invoiceNo: String, fecha: String, hora: String) {
         let self = this;
-        return new Promise( async(resolve, reject) => {
-            if(!invoiceNo || invoiceNo.length < 8) {
+        return new Promise(async (resolve, reject) => {
+            if (!invoiceNo || invoiceNo.length < 8) {
                 return [{ status: 'DC_INVALID', message: 'Numero de factura incorrecto.' }];
             } else {
                 await self.connect();
-                if(self._pool === null) return;
+                if (self._pool === null) return;
                 self.request = new sql.Request(self._pool);
                 self.request.query(`if not exists(select * from c_invoicescanned where C_Numero = '${invoiceNo}')
                 begin
@@ -524,11 +524,33 @@ export class mssql {
                 begin
                     update c_invoicescanned set Duplicado = 'True' where C_Numero = '${invoiceNo}'
                 end`, (err, recordset) => {
-                    if(err) return console.error(err);
+                    if (err) return console.error(err);
 
                     return resolve([{ status: 'DC_VALID' }]);
                 });
             }
+        });
+    }
+
+    /**
+     * Local Store - Inspired in bio Gourmet
+     */
+    getProducts() {
+        let self = this;
+        return new Promise(async (resolve, reject) => {
+            await self.connect();
+            if (self._pool === null) return;
+            self.request = new sql.Request(self._pool);
+            self.request.query(`SELECT TOP 100
+            mc.c_codnasa, mc.c_codigo, mp.C_DESCRI as productname, mp.n_precio1 as price, mp.n_impuesto1 as taxrate, TEXT1 as updateBy
+            FROM VAD20.dbo.MA_PRODUCTOS mp 
+            INNER JOIN VAD20.dbo.MA_CODIGOS mc ON mc.c_codigo = mp.C_CODIGO
+            WHERE n_precio1 > 0`, (err, recordset) => {
+                if (err) return console.error(err);
+
+                return resolve(recordset.recordset);
+            });
+
         });
     }
 
