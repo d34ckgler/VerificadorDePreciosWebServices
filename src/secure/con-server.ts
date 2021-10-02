@@ -465,8 +465,8 @@ export class mssql {
                 await self.connect();
                 if (self._pool === null) return;
                 self.request = new sql.Request(self._pool);
-                self.request.query(`select row_number() over(order by (select 0)) as id, PO.documentno, PO.rif, PO.client, PO.totaldoc, PO.f_fecha, PO.f_hora, PO.codnasa, PO.description, PO.price, sum(PO.qty) as qty, sum(PO.total) as total, PO.Estado, PO.Duplicado, PO.dateDoc, PO.totaldoc/sum(bcc.n_factor) as totaldocusd
-				from (select TOP 5
+                self.request.query(`select TOP 5 row_number() over(order by (select 0)) as id, PO.documentno, PO.rif, PO.client, PO.totaldoc, PO.f_fecha, PO.f_hora, PO.codnasa, PO.description, PO.price, sum(PO.qty) as qty, sum(PO.total) as total, PO.Estado, PO.Duplicado, PO.dateDoc, PO.totaldoc/sum(bcc.n_factor) as totaldocusd
+				from (select --TOP 5
                 row_number() over(order by (select 0)) as id
                 ,mp.C_Numero as documentno
                 ,mp.C_RIF as rif
