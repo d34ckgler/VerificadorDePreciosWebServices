@@ -16,4 +16,11 @@ export const invoiceRoutes = (app: Router) => {
         res.status(200).json(dataInvoice);
         // next();
     });
+
+    app.get('/api/v1/procesar/tracking/Parking/:org', async (req, res, next) => {
+        let sql = new mssql(req.params.org);
+        let dataInvoice = await sql.setParkingTicket(req.query.invoice.toString(), req.query.ticket.toString());
+        res.status(200).json(dataInvoice);
+        // next();
+    });
 };

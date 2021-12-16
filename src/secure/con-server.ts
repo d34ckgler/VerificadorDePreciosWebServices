@@ -17,12 +17,13 @@ export class mssql {
         database: 'VAD20'
     };
 
-    constructor(addr: string) {
+    constructor(addr: any) {
         let self = this;
         let vlan = addr.split('.').slice(1, 2);
         this.addr = parseInt(vlan[0]);
 
-        this.config.server = (self.addr == 60) ? `10.${self.getVPN(self.addr)}.100.19` : `10.${self.getVPN(self.addr)}.100.18`;
+        this.config.server = (self.addr == 90) ? '192.168.100.95' : (self.addr == 60) ? `10.${self.getVPN(self.addr)}.100.19` : `10.${self.getVPN(self.addr)}.100.18`;
+        console.log('IP Asignada: ', addr, this.config.server);
     }
 
     getVPN(t: number) {
@@ -39,7 +40,13 @@ export class mssql {
             case 40:
                 return 40;
                 break;
+            case 50:
+                return 50;
+            break;
             case 60:
+                return 10;
+                break;
+            case 90:
                 return 10;
                 break;
             case 1:
@@ -255,7 +262,7 @@ export class mssql {
         });
     }
 
-    getOrg(vlan: Number) {
+    getOrg(vlan: any) {
         switch (vlan) {
             case 10:
                 return ['TIENDA T01 MANONGO', 'HABLADORES_T01', 1000003];
@@ -268,6 +275,9 @@ export class mssql {
                 break;
             case 40:
                 return ['TIENDA T04 CABUDARE', 'HABLADORES_T04', 1000006];
+                break;
+            case 50:
+                return ['TIENDA T05 PATIO TRIGAL', 'HABLADORES_T05', 1000042];
                 break;
             case 1:
                 return ['EXPRESS LA GRANJA', 'HBE01', 1000010];
@@ -456,11 +466,12 @@ export class mssql {
      * Bio Invoice
      */
 
-    getBioInvoice(invoiceNo: string) {
+     getBioInvoice(invoiceNo: string) {
         let self = this;
         return new Promise(async (resolve, reject) => {
             if (!invoiceNo || invoiceNo.length < 8) {
-                return [{ status: 'DC_INVALID', message: 'Numero de factura incorrecto.' }];
+                //{ status: 'DC_INVALID', message: 'Numero de factura incorrecto.' }
+                return resolve([]);
             } else {
                 await self.connect();
                 if (self._pool === null) return;
@@ -502,6 +513,54 @@ export class mssql {
                     if (err) return resolve([]);
 
                     return resolve(recordset?.recordset);
+                });
+            }
+        });
+    }
+
+    /**
+     * Este metodo registrara el numero de ticket y lo asociara a la factura 
+     * escaneada previamente al ticket
+     * @invoiceNO Numero de factura
+     * @ticket Numero de ticket (Parking Ticket)
+     */
+    setParkingTicket(invoiceNo: String, ticket: String) {
+        let self = this;
+        return new Promise(async (resolve, reject) => {
+            if (!invoiceNo || !ticket) {
+                return [{ status: 'DC_INVALID', message: 'Numero de factura o Ticket invalido!' }];
+            } else {
+                await self.connect();
+                if (self._pool === null) return;
+                self.request = new sql.Request(self._pool);
+
+                console.log(invoiceNo, ticket);
+                self.request.query(`select * from VAD20.dbo.c_invoicescanned where c_numero = '${invoiceNo}' and ticket is not null`, (err, result) => {
+                    if (err) return resolve([{ status: 'DC_ERROR', message: `Ha ocurrido un error al validar el ticket por factura.` }]);
+
+                    console.log(result);
+                    if (result && result.recordset.length > 0) {
+                        console.log(result);
+                        return resolve([{ status: 'DC_ERROR', message: `La factura actual ya posee un ticket` }]);
+                    } else {
+                        self.request.query(`
+                        UPDATE VAD20.dbo.c_invoicescanned
+                        SET
+                            ticket = '${ticket}'
+                        WHERE C_Numero = '${invoiceNo}'
+                        AND ticket is null
+                        `, (err, recordset) => {
+                            if (err) return resolve([{ status: 'DC_ERROR', message: `Ha ocurrido un error al intentar registrar el ticket.` }]);
+
+                            console.log("Registro de Ticket: ", recordset, "Obj: ", recordset?.recordset);
+
+                            if(recordset && recordset?.rowsAffected[0] > 0) {
+                                return resolve([{ status: 'DC_VALID', message: `El ticket ha sido registrado y asociado a la factura: ${invoiceNo}` }]);
+                            } {
+                                return resolve([{ status: 'DC_ERROR', message: `Ha ocurrido un problema, no se pudo asociar el ticket a la factura: ${invoiceNo}` }]);
+                            }
+                        });
+                    }
                 });
             }
         });

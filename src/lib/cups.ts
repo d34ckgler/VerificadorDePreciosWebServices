@@ -16,7 +16,10 @@ export class cups {
                 return ['TIENDA T03 SANTA CECILIA', 'HBT03'];
             break;
             case 40:
-                return ['TIENDA T04 CABUDARE', 'HABLADORES_T04'];
+                return ['TIENDA T04 CABUDARE', 'T04'];
+            break;
+            case 50:
+                return ['TIENDA T05 PATIO TRIGAL', 'HABLADORES_T05'];
             break;
             case 1:
                 return ['EXPRESS LA GRANJA', 'HBE01'];
@@ -47,6 +50,12 @@ export class cups {
             console.log("stderr: " + stderr);
         })
     }
+    rounded(float: number, taxamt: number) {
+        return Math.floor( (float/(taxamt/100+1))*100)/100;
+    }
+    getTaxAmt(float: number, taxamt: number) {
+        return Math.floor((Math.floor( (float/(taxamt/100+1))*100)/100)*(taxamt/100)*100)/100;
+    }
     print(Parameters: any) {
         return new Promise( (resolve, reject) => {
             if(typeof Parameters === 'undefined' || Object.keys(Parameters).length <= 0) return reject();
@@ -58,10 +67,12 @@ export class cups {
                                                                         + Parameters.c_codigo+s
                                                                         + Parameters.c_codnasa+s
                                                                         + '"'+Parameters.C_DESCRI+'"'+s
-                                                                        + Parameters.pricelist+s
+                                                                        + (Parameters?.currency === 'USD' ? this.rounded(Parameters?.price.toFixed(2), Parameters?.n_impuesto1) : this.rounded(Parameters?.price, Parameters?.n_impuesto1))+s
                                                                         + Parameters.iva+s
                                                                         + Parameters.pv+s
-                                                                        + Parameters.currency, (error, stdout, stderr) => {
+                                                                        + Parameters.currency+s
+                                                                        + (Parameters?.currency === 'USD' ? this.getTaxAmt(Parameters?.price.toFixed(2), Parameters?.n_impuesto1) : this.getTaxAmt(Parameters?.price, Parameters?.n_impuesto1))+s
+                                                                        + Parameters.prcusd, (error, stdout, stderr) => {
                 console.log("stdout: " + stdout);
                 console.log("stderr: " + stderr);
                 if(stderr.indexOf('Error: Unable to access jarfile ../src/plugin/PrintHablClass.jar ') >= 0)

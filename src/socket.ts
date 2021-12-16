@@ -52,11 +52,11 @@ module.exports = class io {
             });
 
             clients[socket.id].on('printlabel', data => {
-                let sql = require('./secure/con-server');
-                sql = new sql(_this.addr);
+                // let sql = require('./secure/con-server');
+                let sql = new mssql(_this.addr);
                 let vlan = _this.addr.split('.').slice(1, 2);
                 console.log("Probando impresora");
-                sql.printlabel('"' + sql.getOrg(parseInt(vlan[0]))[0] + '"', sql.getOrg(parseInt(vlan[0]))[1], '"' + data.szcode + '"', '"' + data.sku + '"', '"' + data.desc + '"', '"' + data.price + '"', '"' + data.iva + '"', '"' + data.pv + '"', data.ved);
+                sql.printlabel('"' + sql.getOrg(parseInt(vlan[0]))[0] + '"', sql.getOrg(parseInt(vlan[0]))[1].toString(), '"' + data.szcode + '"', '"' + data.sku + '"', '"' + data.desc + '"', '"' + data.price + '"', '"' + data.iva + '"', '"' + data.pv + '"', data.ved);
             })
 
             socket.on('disconnect', function (data) {
