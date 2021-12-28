@@ -31,7 +31,10 @@ export const invoiceRoutes = (app: Router) => {
     app.post('/api/v2/consulta/camioneta/factura/:org', async (req: Request, res, next) => {
         let sql = new mssql(req.params?.org);
         console.info(req?.body);
-        let dataInvoice = await sql.consultaSorteoCamioneta(req?.body);
-        res.status(200).json(dataInvoice);
+        await sql.consultaSorteoCamioneta(req?.body).then( OK => {
+            res.status(200).json(OK);
+        }).catch( error => {
+            res.status(500).json([]);
+        });
     });
 };

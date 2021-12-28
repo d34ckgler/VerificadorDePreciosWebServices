@@ -653,7 +653,10 @@ export class mssql {
     consultaSorteoCamioneta({ factura, rif, typeDoc }) {
         let self = this;
         return new Promise(async (resolve, reject) => {
-            await self.connect();
+            await self.connect().catch( error => {
+                return reject(error);
+            });
+            
             if (self._pool === null) return;
             self.request = new sql.Request(self._pool);
             self.request.query(`select
