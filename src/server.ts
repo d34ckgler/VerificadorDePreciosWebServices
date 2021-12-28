@@ -50,8 +50,8 @@ require('./routes')(app);
 //app.use(helmet());
 app.use(cors(corsOptions));
 app.use(compression);
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-app.use(bodyParser.json({limit: '50mb', extended: true}));
+// app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: '50mb', extended: true }));
 app.use(express.json({ limit: '50mb', extended: true }));
 app.use(express.static(path.join(__dirname, 'public_html'), {
     extensions: ['html', 'php']

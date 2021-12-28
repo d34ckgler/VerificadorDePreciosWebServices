@@ -1,6 +1,10 @@
-import { Router } from "express";
+import { Router, Request } from "express";
+const bodyParser = require('body-parser');
 import { mssql } from "../secure/con-server";
 export const invoiceRoutes = (app: Router) => {
+
+    app.use(bodyParser.json({ limit: '50mb', extended: true }));
+
     /**
      * Bio Invoice Routes
      */
@@ -22,5 +26,12 @@ export const invoiceRoutes = (app: Router) => {
         let dataInvoice = await sql.setParkingTicket(req.query.invoice.toString(), req.query.ticket.toString());
         res.status(200).json(dataInvoice);
         // next();
+    });
+
+    app.post('/api/v2/consulta/camioneta/factura/:org', async (req: Request, res, next) => {
+        let sql = new mssql(req.params?.org);
+        console.info(req?.body);
+        let dataInvoice = await sql.consultaSorteoCamioneta(req?.body);
+        res.status(200).json(dataInvoice);
     });
 };

@@ -1,4 +1,7 @@
 'use strict'
+
+import { order } from "../interface/interface";
+
 const sql = require('mssql');
 const color = require('colors');
 
@@ -22,8 +25,9 @@ export class mssql {
         let vlan = addr.split('.').slice(1, 2);
         this.addr = parseInt(vlan[0]);
 
-        this.config.server = (self.addr == 90) ? '192.168.100.95' : (self.addr == 60) ? `10.${self.getVPN(self.addr)}.100.19` : `10.${self.getVPN(self.addr)}.100.18`;
-        console.log('IP Asignada: ', addr, this.config.server);
+        this.config.database = (self.addr == 99) ? 'SpeedCart' : 'VAD20';
+        this.config.server = (self.addr == 99) ? '10.10.100.104' : (self.addr == 60) ? `10.${self.getVPN(self.addr)}.100.19` : `10.${self.getVPN(self.addr)}.100.18`;
+        console.log('IP Asignada: ', addr, this.config.server, 'DB Asignada: ', this.config.database);
     }
 
     getVPN(t: number) {
@@ -42,7 +46,7 @@ export class mssql {
                 break;
             case 50:
                 return 50;
-            break;
+                break;
             case 60:
                 return 10;
                 break;
@@ -466,7 +470,7 @@ export class mssql {
      * Bio Invoice
      */
 
-     getBioInvoice(invoiceNo: string) {
+    getBioInvoice(invoiceNo: string) {
         let self = this;
         return new Promise(async (resolve, reject) => {
             if (!invoiceNo || invoiceNo.length < 8) {
@@ -554,7 +558,7 @@ export class mssql {
 
                             console.log("Registro de Ticket: ", recordset, "Obj: ", recordset?.recordset);
 
-                            if(recordset && recordset?.rowsAffected[0] > 0) {
+                            if (recordset && recordset?.rowsAffected[0] > 0) {
                                 return resolve([{ status: 'DC_VALID', message: `El ticket ha sido registrado y asociado a la factura: ${invoiceNo}` }]);
                             } {
                                 return resolve([{ status: 'DC_ERROR', message: `Ha ocurrido un problema, no se pudo asociar el ticket a la factura: ${invoiceNo}` }]);
@@ -613,4 +617,71 @@ export class mssql {
         });
     }
 
+    setProcessOrder(order: order) {
+        let self = this;
+        return new Promise(async (resolve, reject) => {
+            if (!order) return reject("Error, el objeto para la orden no es valido.");
+
+            /**
+             * Procesar objeto order[] para registrar orden en base de datos.
+             */
+
+            // Abriendo conexion
+            await self.connect();
+            if (!self._pool) return reject("Error, no hay una conexion activa.");
+
+            // creando cliente
+            self.request = new sql.Request(self._pool);
+            self.request.query(`
+            INSERT INTO c_order (localidad, tienda_id, norder, envio, sub_total, exento, base_imponible, iva, total, rif, direccion_de_entrega, direccion_a, direccion_b, descripcion, telefono, email, fecha_de_orden, fecha_de_entrega, delivery, isImported, c_codigo)
+            VALUES ('${order?.localidad}', 1, ${order?.norder}, 0, ${order?.sub_total}, 0, ${order?.base_imponible}, 0, ${order?.total}, '${order?.rif}', '${order?.direccion_de_entrega}', '${order?.direccion_a}', '${order?.direccion_b}', '${order?.descripcion}', '${order?.telefono}', '${order?.email}', GETDATE(), GETDATE(), NULL, 0, NULL)
+            `, (error, recordset) => {
+                if (error) return reject(`Error al ejecutar query:: ${error?.toString()?.split('\n')[0]}`);
+
+                // Orden registrada exitosamente!
+                return resolve(`Sr(a). ${order?.descripcion}, su orden N#: (${order?.norder}) ha sido procesada con exito. Por favor, esperar que la orden viaje a la caja #24.`);
+            });
+        });
+    }
+
+    /**
+     * Consulta para EndPoint's Sorteo Mercadeo Camioneta
+     */
+    /**
+     * Local Store - Inspired in bio Gourmet
+     */
+    consultaSorteoCamioneta({ factura, rif, typeDoc }) {
+        let self = this;
+        return new Promise(async (resolve, reject) => {
+            await self.connect();
+            if (self._pool === null) return;
+            self.request = new sql.Request(self._pool);
+            self.request.query(`select
+            row_number() over(order by (select 0)) as id,
+            sales.Organizacion,
+            sales.Fecha as f_fecha,
+            sales."N# Factura" as documentno, 
+            sales."Monto $ S/IVA" as subtotaldoc, 
+            sales."Monto $ C/IVA" as totaldoc, 
+            sales."Tickets Generados" as tickets,
+            sales.Cedula as rif,
+            sales."Nombre Cliente" as "cliente",
+            cast(0 as bit) as Duplicado,
+            mt.COD_PRINCIPAL as codnasa,
+            mp.C_DESCRI as description,
+            mt.Precio as price,
+            mt.Cantidad as qty,
+            mt.total
+            from bio_rv_sorteo_sales sales
+            inner join MA_TRANSACCION mt on mt.C_Numero = sales."N# Factura"
+            inner join MA_PRODUCTOS mp on mp.C_CODIGO = mt.COD_PRINCIPAL 
+            where "N# Factura" = '${factura}' 
+            and Cedula = '${typeDoc}${rif}'`, (err, recordset) => {
+                if (err)
+                    return reject(`Error al ejecutar consulta: ${err.toString().split('\n')[0]}`);
+
+                return resolve(recordset.recordset);
+            });
+        });
+    }
 }
