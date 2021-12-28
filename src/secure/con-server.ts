@@ -669,9 +669,9 @@ export class mssql {
             cast(0 as bit) as Duplicado,
             mt.Codigo as codnasa,
             mp.C_DESCRI as description,
-            mt.precio as price,
+            round(mt.precio,2) as price,
             mt.amount as qty,
-            mt.total
+            round(mt.total,2)
             from bio_rv_sorteo_sales sales
             inner join bio_rv_m_transaction mt on mt.C_Numero = sales."N# Factura"
             inner join MA_PRODUCTOS mp on mp.C_CODIGO = mt.COD_PRINCIPAL 
