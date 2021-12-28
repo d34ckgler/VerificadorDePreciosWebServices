@@ -670,13 +670,15 @@ export class mssql {
             mt.Codigo as codnasa,
             mp.C_DESCRI as description,
             round(mt.precio,2) as price,
-            mt.amount as qty,
-            round(mt.total,2)
+            sum(mt.amount) as qty,
+            sum(round(mt.total,2)) as total
             from bio_rv_sorteo_sales sales
             inner join bio_rv_m_transaction mt on mt.C_Numero = sales."N# Factura"
             inner join MA_PRODUCTOS mp on mp.C_CODIGO = mt.COD_PRINCIPAL 
             where "N# Factura" = '${factura}' 
-            and Cedula = '${typeDoc}${rif}'`, (err, recordset) => {
+            and Cedula = '${typeDoc}${rif}'
+            group by sales.Organizacion, sales.Fecha, sales."N# Factura", sales."Monto $ S/IVA", sales."Monto $ C/IVA", sales.[Tickets Generados], sales.Cedula, sales.[Nombre Cliente],
+            mt.Codigo, mp.C_DESCRI, mt.precio;`, (err, recordset) => {
                 if (err)
                     return reject(`Error al ejecutar consulta: ${err.toString().split('\n')[0]}`);
 
