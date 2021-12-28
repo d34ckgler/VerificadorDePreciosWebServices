@@ -34,7 +34,7 @@ export const invoiceRoutes = (app: Router) => {
         await sql.consultaSorteoCamioneta(req?.body).then( OK => {
             res.status(200).json(OK);
         }).catch( error => {
-            res.status(500).json([]);
+            res.status(200).json([]);
         });
     });
 };
