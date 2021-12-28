@@ -667,13 +667,13 @@ export class mssql {
             sales.Cedula as rif,
             sales."Nombre Cliente" as "cliente",
             cast(0 as bit) as Duplicado,
-            mt.COD_PRINCIPAL as codnasa,
+            mt.Codigo as codnasa,
             mp.C_DESCRI as description,
-            mt.Precio as price,
-            mt.Cantidad as qty,
+            mt.precio as price,
+            mt.amount as qty,
             mt.total
             from bio_rv_sorteo_sales sales
-            inner join MA_TRANSACCION mt on mt.C_Numero = sales."N# Factura"
+            inner join bio_rv_m_transaction mt on mt.C_Numero = sales."N# Factura"
             inner join MA_PRODUCTOS mp on mp.C_CODIGO = mt.COD_PRINCIPAL 
             where "N# Factura" = '${factura}' 
             and Cedula = '${typeDoc}${rif}'`, (err, recordset) => {
