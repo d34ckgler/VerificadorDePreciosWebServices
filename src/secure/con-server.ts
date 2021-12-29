@@ -480,7 +480,7 @@ export class mssql {
                 await self.connect();
                 if (self._pool === null) return;
                 self.request = new sql.Request(self._pool);
-                self.request.query(`select TOP 5 row_number() over(order by (select 0)) as id, PO.documentno, PO.rif, PO.client, PO.totaldoc, PO.f_fecha, PO.f_hora, PO.codnasa, PO.description, PO.price, sum(PO.qty) as qty, sum(PO.total) as total, PO.Estado, PO.Duplicado, PO.dateDoc, PO.totaldoc/sum(bcc.n_factor) as totaldocusd
+                self.request.query(`select TOP 5 row_number() over(order by (select 0)) as id, PO.documentno, PO.rif, PO.client, PO.totaldoc, PO.f_fecha, PO.f_hora, PO.codnasa, PO.description, PO.price, sum(PO.qty) as qty, sum(PO.total) as total, PO.Estado, PO.Duplicado, PO.dateDoc, coalesce(PO.totaldoc/sum(bcc.n_factor), sum(PO.total)) as totaldocusd
 				from (select --TOP 5
                 row_number() over(order by (select 0)) as id
                 ,mp.C_Numero as documentno
@@ -509,7 +509,7 @@ export class mssql {
 				--having sum(Cantidad) > 0
                 --order by mt.Subtotal Desc
 				) AS PO
-				inner join VAD20.dbo.bio_c_conversion_rate bcc on bcc.f_fecha = convert(date, getdate(), 105)
+				left join VAD20.dbo.bio_c_conversion_rate bcc on bcc.f_fecha = convert(date, getdate(), 105)
 				group by PO.documentno, PO.rif, PO.client, PO.totaldoc, PO.f_fecha, PO.f_hora, PO.codnasa, PO.description, PO.price, PO.Estado, PO.Duplicado, PO.dateDoc
 				having sum(PO.qty) > 0
 				order by PO.price DESC
@@ -644,6 +644,18 @@ export class mssql {
         });
     }
 
+    validate({ factura, rif, typeDoc }) {
+        if(factura && factura !== '' && rif) {
+            return`sales."N# Factura" = '${factura}' and sales.Cedula = '${typeDoc}${rif}'`;
+        } else if((!factura || factura === '') && rif) {
+            return`sales.Cedula = '${typeDoc}${rif}'`;
+        } else if(factura && !rif) {
+            return`sales."N# Factura" = '${factura}'`;
+        } else {
+            '';
+        }
+    }
+
     /**
      * Consulta para EndPoint's Sorteo Mercadeo Camioneta
      */
@@ -653,35 +665,36 @@ export class mssql {
     consultaSorteoCamioneta({ factura, rif, typeDoc }) {
         let self = this;
         return new Promise(async (resolve, reject) => {
+            if(!rif || rif === '') return reject("No posee rif");
+            
             await self.connect().catch( error => {
                 return reject(error);
             });
-            
+
             if (self._pool === null) return;
             self.request = new sql.Request(self._pool);
             self.request.query(`select
             row_number() over(order by (select 0)) as id,
-            sales.Organizacion,
-            sales.Fecha as f_fecha,
-            sales."N# Factura" as documentno, 
-            sales."Monto $ S/IVA" as subtotaldoc, 
-            sales."Monto $ C/IVA" as totaldoc, 
-            sales."Tickets Generados" as tickets,
+            --sales.Organizacion,
+            --sales.Fecha as f_fecha,
+            --sales."N# Factura" as documentno, 
+            sum(sales."Monto $ S/IVA") as subtotaldoc, 
+            sum(sales."Monto $ C/IVA") as totaldoc, 
+            sum(sales."Tickets Generados") as tickets,
             sales.Cedula as rif,
             sales."Nombre Cliente" as "cliente",
             cast(0 as bit) as Duplicado,
-            mt.Codigo as codnasa,
+            mp.C_CODIGO as codnasa,
             mp.C_DESCRI as description,
-            round(mt.precio,2) as price,
+            --round(mt.precio,2) as price,
             sum(mt.amount) as qty,
             sum(round(mt.total,2)) as total
             from bio_rv_sorteo_sales sales
             inner join bio_rv_m_transaction mt on mt.C_Numero = sales."N# Factura"
-            inner join MA_PRODUCTOS mp on mp.C_CODIGO = mt.COD_PRINCIPAL 
-            where "N# Factura" = '${factura}' 
-            and Cedula = '${typeDoc}${rif}'
-            group by sales.Organizacion, sales.Fecha, sales."N# Factura", sales."Monto $ S/IVA", sales."Monto $ C/IVA", sales.[Tickets Generados], sales.Cedula, sales.[Nombre Cliente],
-            mt.Codigo, mp.C_DESCRI, mt.precio;`, (err, recordset) => {
+            inner join MA_PRODUCTOS mp on mp.C_CODIGO = mt.COD_PRINCIPAL  
+            where ${self.validate({factura, rif, typeDoc})}
+            group by sales.Cedula, sales.[Nombre Cliente], mp.C_CODIGO, mp.C_DESCRI
+            order by mp.C_DESCRI desc;`, (err, recordset) => {
                 if (err)
                     return reject(`Error al ejecutar consulta: ${err.toString().split('\n')[0]}`);
 
