@@ -10,22 +10,22 @@ export class cups {
                 return ['TIENDA T01 MANONGO', 'HABLADORES_T01'];
             break;
             case 20:
-                return ['TIENDA T02 PARAPARAL', 'HBT02'];
+                return ['TIENDA T02 PARAPARAL', 'HABLADORES_T02'];
             break;
             case 30:
-                return ['TIENDA T03 SANTA CECILIA', 'HBT03'];
+                return ['TIENDA T03 SANTA CECILIA', 'HABLADORES_T03'];
             break;
             case 40:
-                return ['TIENDA T04 CABUDARE', 'T04'];
+                return ['TIENDA T04 CABUDARE', 'HABLADORES_T04'];
             break;
             case 50:
                 return ['TIENDA T05 PATIO TRIGAL', 'HABLADORES_T05'];
             break;
             case 1:
-                return ['EXPRESS LA GRANJA', 'HBE01'];
+                return ['EXPRESS LA GRANJA', 'HABLADORES_E01'];
             break;
             case 2:
-                return ['EXPRESS EL BOSQUE', 'HBE02'];
+                return ['EXPRESS EL BOSQUE', 'HABLADORES_E02'];
             break;
             default: 
                 return ['TIENDA T01 MANONGO', 'HABLADORES_T01'];
@@ -60,7 +60,7 @@ export class cups {
         return new Promise( (resolve, reject) => {
             if(typeof Parameters === 'undefined' || Object.keys(Parameters).length <= 0) return reject();
             let s = ' ';
-            console.log("Parametros", Parameters);
+            console.log("Parametros", this.getOrg(parseInt(Parameters.org[0]))[0], this.getOrg(parseInt(Parameters.org[0]))[1]);
             this.child = this.exec('java -jar ./src/plugin/PrintHablClass.jar '
                                                                         + '"'+this.getOrg(parseInt(Parameters.org[0]))[0]+'"'+s
                                                                         + '"'+this.getOrg(parseInt(Parameters.org[0]))[1]+'"'+s
