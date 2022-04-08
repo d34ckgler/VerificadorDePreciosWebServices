@@ -138,7 +138,7 @@ module.exports = function (app: Router) {
         let cupClient = new cups();
         let vlan = args.org.split('.').slice(1, 2);
         args.org = vlan;
-        cupClient.print(args).then((r: any) => {
+        cupClient.printf(args).then((r: any) => {
             console.log(r);
             res.send(r);
         });

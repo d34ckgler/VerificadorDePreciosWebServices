@@ -86,4 +86,25 @@ export class cups {
 
         });
     }
+
+    printf(args: any) {
+        const self = this;
+        return new Promise((resolve, reject) => {
+            if(typeof args === 'undefined' || Object.keys(args).length <= 0) return reject(null);
+            let scape = ' ';
+            let orgData = self.getOrg(parseInt(args['org'][0]));
+            let orgName = orgData[0];
+            let orgPrinter = orgData[1];
+            // return args;
+            self.child = self.exec(`java -jar ./src/plugin/cupsPrinter.jar ` + `"${orgName}" "${orgPrinter}" "${args['C_DESCRI']}" "${args['c_codigo']}" ${args['c_codnasa']} "${args['price']}" "${args['iva']}" "${args['pv']}" "${args['ved']}" "${args['prcusd']}" "${args['isUsd']}"`, (error, stdout, stderr) => {
+                if(error) {
+                    console.error(error, "\n", stdout, "\n", stderr);
+                    return resolve([{STATUS: "ERROR", msg: "Libreria no encontrada"}]);
+                } else if(stderr.indexOf('GRAVE: null') >= 0) {
+                    return resolve([{STATUS: "ERROR", msg: "Error, Verificar Cups de Impresiòn Reportar a Sistemas OP."}]);
+                }
+                else    return resolve([{STATUS: "OK", msg: "Impresión de Hablador Exitosa"}]);
+            });
+        });
+    }
 }
