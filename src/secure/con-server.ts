@@ -272,7 +272,7 @@ export class mssql {
                 return ['TIENDA T01 MANONGO', 'HABLADORES_T01', 1000003];
                 break;
             case 20:
-                return ['TIENDA T02 PARAPARAL', 'HBT02', 1000004];
+                return ['TIENDA T02 PARAPARAL', 'HBT02', 1000050]; // 1000004
                 break;
             case 30:
                 return ['TIENDA T03 SANTA CECILIA', 'HBT03', 1000005];
