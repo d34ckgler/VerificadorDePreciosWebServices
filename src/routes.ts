@@ -78,7 +78,7 @@ module.exports = function (app: Router) {
                 if (r.recordset.length > 0) {
                     Object.assign(r.recordset[0], { p_dolar: format(r.recordset[0].prcusd, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',') });
                     // Object.assign(r.recordset[0], { format: format(r.recordset[0].precio, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',') });
-                    Object.assign(r.recordset[0], { format: format( parseFloat(r.recordset[0].precio.toFixed(2)), ".", 2)});
+                    Object.assign(r.recordset[0], { format: format(r.recordset[0].precio, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',') });
                     Object.assign(r.recordset[0], { tasaf: format(r.recordset[0].tasa, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',') });
                     Object.assign(r.recordset[0], { ved: format(r.recordset[0].precio * 1000000, ".", 2).replace('.', '..').replace(/,/g, '.').replace('..', ',') });
                 }
